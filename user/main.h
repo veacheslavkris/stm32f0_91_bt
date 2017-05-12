@@ -5,6 +5,9 @@
 #include "led.h"
 #include "uart.h"
 #include "rtc.h"
+#include "hardware.h"
+#include "maxim_7219.h"
+
 
 //#include "debug.h"
 

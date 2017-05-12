@@ -1,12 +1,19 @@
 #include "hw_maxim7219.h"
 
-GPIO_TypeDef* PORT_CLK;
-GPIO_TypeDef* PORT_DOUT;
-GPIO_TypeDef* PORT_LATCH;
+/******************************************************************************/
+/*                        PORTS AND PINS DEFINITION                          */
+/******************************************************************************/
+// PA0
+GPIO_TypeDef* PORT_CLK = GPIOA;
+uint32_t PIN_CLK_POS = 0;
 
-uint32_t PIN_CLK_POS;
-uint32_t PIN_DOUT_POS;
-uint32_t PIN_LATCH_POS;
+// PA1
+GPIO_TypeDef* PORT_DOUT  = GPIOA;
+uint32_t PIN_DOUT_POS = 1;
+
+//PA4
+GPIO_TypeDef* PORT_LATCH = GPIOA;
+uint32_t PIN_LATCH_POS = 4;
 
 void LatchMax7219Off(void)
 {
@@ -48,18 +55,23 @@ void SetDataPin(uint32_t val)
 }
 //
 
-void HWInitMax7219Gpio( GPIO_TypeDef* P_CLK, uint32_t PIN_CLK_D_POS, GPIO_TypeDef* P_DOUT, uint32_t PIN_DOUT_D_POS, GPIO_TypeDef* P_LATCH, uint32_t PIN_LATCH_D_POS)
+//void HwMax7219_InitRcc(void)
+//{
+//	// MAXIM7219
+//	RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
+//}
+
+void HwMax7219_InitGpio(void)
 {
-	PORT_CLK = P_CLK;
-	PORT_DOUT = P_DOUT;
-	PORT_LATCH = P_LATCH;
+		// MAXIM7219
+	RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
 	
-	PIN_CLK_POS = PIN_CLK_D_POS;
-	PIN_DOUT_POS = PIN_DOUT_D_POS;
-	PIN_LATCH_POS = PIN_LATCH_D_POS;
+	GpioSetModeOutputStrong(GPIOA, PIN_CLK_POS, OSPEEDR_HIGH);
+	GpioSetModeOutputStrong(GPIOA, PIN_DOUT_POS, OSPEEDR_HIGH);
+	GpioSetModeOutputStrong(GPIOA, PIN_LATCH_POS, OSPEEDR_HIGH);
+
+
 }
-
-
 
 
 

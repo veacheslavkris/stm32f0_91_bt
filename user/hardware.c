@@ -5,23 +5,25 @@ void init_rcc(void)
 	// led gpio
 //	RCC->AHBENR |= RCC_AHBENR_GPIOAEN; /* (1) */ 
 
-	// MAXIM7219
-	RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
+//	// MAXIM7219
+//	RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
 	
 	// BTN_C13, UART
 //	RCC->AHBENR |= RCC_AHBENR_GPIOCEN; 
+	
+//	HwMax7219_InitRcc();
 }
 //
 
 void HWInitGpio()
 {
-	init_rcc();
-	
+//	init_rcc();
 //	init_led_gpio();
 //	init_I2C_gpio();
 //	init_max7219_gpio();
 //	init_btn_interrupt();
 //	init_uart8();
+	HwMax7219_InitGpio();
 	
 }
 //

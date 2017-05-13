@@ -93,15 +93,14 @@ int main(void)
 
 	SysTick_Config(SystemCoreClock/1000);/* 1ms config with HSE 8MHz/system 48Mhz*/
 	
-	HWInitGpio();
 	
 	Max7219_Init();
 	Max7219_ClearAllDigits();
 	
 	delay_led_ms(2000);
 	
-	Max7219_ShowAtPositionNumber(0,0);
-	Max7219_ShowAtPositionNumber(4,0);
+	Max7219_ShowAtPositionNumber(0,5);
+	Max7219_ShowAtPositionNumber(4,6);
 	
 
 	INIT_RTC_LSE();

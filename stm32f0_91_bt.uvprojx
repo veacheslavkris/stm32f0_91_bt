@@ -430,19 +430,9 @@
               <FilePath>.\user\maxim_7219.c</FilePath>
             </File>
             <File>
-              <FileName>hardware.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\user\hardware.c</FilePath>
-            </File>
-            <File>
               <FileName>gpio.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\user\gpio.c</FilePath>
-            </File>
-            <File>
-              <FileName>hw_maxim7219.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\user\hw_maxim7219.c</FilePath>
             </File>
           </Files>
         </Group>

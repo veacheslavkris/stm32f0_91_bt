@@ -12,10 +12,7 @@
 
 // amount of check points count
 #define ARY_CPS_PATH_COUNT 500
-
-//
 #define UART_STATE_RECORD_SIZE 32
-//#define UART_STATE_STRING_SIZE 24 
 
 typedef struct
 {

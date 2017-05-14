@@ -69,22 +69,30 @@ void dbg_clear_dbg_cps_path(DbgCheckPointsPath* p_dbg_cps_path)
 
 void dbg_set_check_point(UartHandle* phUart, DbgCheckPointsPath* p_dbg_path, uint32_t cycle_number)
 {
+	
+	//	|8|_|-|_|  |_|_|_|   |_|_|_|...|_|_|_|
+	//  cycles_n  uart_name   mode_name
+	//      4         3            16
+	
+	
+	
 	uint8_t chr;
 	uint32_t chr_ix;
 	uint32_t str_size;
-	uint32_t col_ix = 0;
+	uint32_t col_ix = 0; // UART_STATE_RECORD_SIZE 32
 	uint32_t row_ix = p_dbg_path->ix;
 	
 	
-	if(p_dbg_path->ix < p_dbg_path->max_size)
-	{
-		chr = cycle_number + 0x30;
+	if(p_dbg_path->ix >= p_dbg_path->max_size) p_dbg_path->ix = 0;
 		
-		p_dbg_path->ary_dbg_chk_pts[row_ix][col_ix++] = chr; // cycle number
-		p_dbg_path->ary_dbg_chk_pts[row_ix][col_ix++] = ' ';
-		p_dbg_path->ary_dbg_chk_pts[row_ix][col_ix++] = '-';
-		p_dbg_path->ary_dbg_chk_pts[row_ix][col_ix++] = ' ';
-	}
+	
+	chr = cycle_number + 0x30;
+	
+	p_dbg_path->ary_dbg_chk_pts[row_ix][col_ix++] = chr; // cycle number
+	p_dbg_path->ary_dbg_chk_pts[row_ix][col_ix++] = ' ';
+	p_dbg_path->ary_dbg_chk_pts[row_ix][col_ix++] = '-';
+	p_dbg_path->ary_dbg_chk_pts[row_ix][col_ix++] = ' ';
+	
 	
 	// load uart name
 	str_size = 3; //UART_NAME_SIZE = 8;
@@ -94,7 +102,7 @@ void dbg_set_check_point(UartHandle* phUart, DbgCheckPointsPath* p_dbg_path, uin
 	}
 
 	// load enum name
-	str_size = UART_MODE_NAME_SIZE; // = UART_STATE_STRING_SIZE;
+	str_size = UART_MODE_NAME_SIZE;// 16 // = UART_STATE_STRING_SIZE;
 	for(chr_ix = 0; chr_ix<str_size; chr_ix++)
 	{
 		p_dbg_path->ary_dbg_chk_pts[row_ix][col_ix++] = phUart->pUartMode->ary_mode_name[chr_ix];

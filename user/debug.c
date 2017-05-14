@@ -12,7 +12,7 @@ void dbg_clear_dbg_cps_path(DbgCheckPointsPath* p_dbg_cps_path)
 	uint32_t col_ix = 0;
 	
 	uint32_t row_size = ARY_CPS_PATH_COUNT;
-	uint32_t col_size = UART_ENUM_NAME_SIZE;
+	uint32_t col_size = UART_STATE_RECORD_SIZE;
 	
 
 	
@@ -80,21 +80,21 @@ void dbg_set_check_point(UartHandle* phUart, DbgCheckPointsPath* p_dbg_path, uin
 	{
 		chr = cycle_number + 0x30;
 		
-		p_dbg_path->ary_dbg_chk_pts[row_ix][col_ix++] = chr;
+		p_dbg_path->ary_dbg_chk_pts[row_ix][col_ix++] = chr; // cycle number
 		p_dbg_path->ary_dbg_chk_pts[row_ix][col_ix++] = ' ';
 		p_dbg_path->ary_dbg_chk_pts[row_ix][col_ix++] = '-';
 		p_dbg_path->ary_dbg_chk_pts[row_ix][col_ix++] = ' ';
 	}
 	
 	// load uart name
-	str_size = 3; //UART_NAME_SIZE;
+	str_size = 3; //UART_NAME_SIZE = 8;
 	for(chr_ix = 0; chr_ix<str_size; chr_ix++)
 	{
 		p_dbg_path->ary_dbg_chk_pts[row_ix][col_ix++] = phUart->ary_uart_name[chr_ix];
 	}
 
 	// load enum name
-	str_size = UART_STATE_STRING_SIZE;
+	str_size = UART_MODE_NAME_SIZE; // = UART_STATE_STRING_SIZE;
 	for(chr_ix = 0; chr_ix<str_size; chr_ix++)
 	{
 		p_dbg_path->ary_dbg_chk_pts[row_ix][col_ix++] = phUart->pUartMode->ary_mode_name[chr_ix];

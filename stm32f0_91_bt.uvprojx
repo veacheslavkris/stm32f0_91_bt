@@ -385,11 +385,6 @@
               <FilePath>.\user\main.c</FilePath>
             </File>
             <File>
-              <FileName>uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\user\uart.c</FilePath>
-            </File>
-            <File>
               <FileName>exti.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\user\exti.c</FilePath>
@@ -448,6 +443,11 @@
               <FileName>uart7.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\user\uart7.c</FilePath>
+            </File>
+            <File>
+              <FileName>uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\user\uart.c</FilePath>
             </File>
           </Files>
         </Group>

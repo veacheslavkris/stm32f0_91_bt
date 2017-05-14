@@ -31,9 +31,6 @@ uint8_t ary_dt_answer[DT_ANSW_LENGTH];
 		
 
 
-#define SET_DE (GPIOA->BSRR = GPIO_BSRR_BS_4)
-#define SET_RE (GPIOA->BRR = GPIO_BSRR_BS_4)
-
 #define SIZE_OF_UART_HANDLE_ARY 50
 #define SIZE_OF_BT_ADDRESS_DATA 26
 

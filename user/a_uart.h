@@ -37,6 +37,8 @@ UartReceivedChar* UartGetReceivedChar(USART_TypeDef* UART);
 
 
 void UartConfigBrrTeReUe(USART_TypeDef* UART, uint32_t apb1_clk, uint32_t brr);
+void UartConfig_TC_TXNE_Enable(USART_TypeDef* UART);
+void UartConfig_InitInterrupts(IRQn_Type irq, uint32_t priority);
 
 
 void UartSendCharCR(USART_TypeDef* UART, uint8_t);

@@ -20,28 +20,28 @@
 #define UART_ERROR_TO			0x00000010
 
 
-#define UART_BT_START_TXEIE		UART_BT->CR1 |= USART_CR1_TXEIE		/* enable RXNE interrupt */
-#define UART_BT_STOP_TXEIE		UART_BT->CR1 &= ~USART_CR1_TXEIE	/* disable RXNE interrupt */
-#define	UART_BT_CLEAR_TC			UART_BT->ICR |= USART_ICR_TCCF 
-#define	UART_BT_CLEAR_TXE			UART_BT->ISR &= ~USART_ISR_TXE
+//#define UART_BT_START_TXEIE		UART_BT->CR1 |= USART_CR1_TXEIE		/* enable RXNE interrupt */
+//#define UART_BT_STOP_TXEIE		UART_BT->CR1 &= ~USART_CR1_TXEIE	/* disable RXNE interrupt */
+//#define	UART_BT_CLEAR_TC			UART_BT->ICR |= USART_ICR_TCCF 
+//#define	UART_BT_CLEAR_TXE			UART_BT->ISR &= ~USART_ISR_TXE
 
-#define UART_PC_START_TXEIE		UART_PC->CR1 |= USART_CR1_TXEIE		/* enable RXNE interrupt */
-#define UART_PC_STOP_TXEIE		UART_PC->CR1 &= ~USART_CR1_TXEIE	/* disable RXNE interrupt */
-#define UART_PC_CLEAR_TC			UART_PC->ICR |= USART_ICR_TCCF		/* clear TC interrupt */
-#define	UART_PC_CLEAR_TXE			UART_PC->ISR &= ~USART_ISR_TXE
+//#define UART_PC_START_TXEIE		UART_PC->CR1 |= USART_CR1_TXEIE		/* enable RXNE interrupt */
+//#define UART_PC_STOP_TXEIE		UART_PC->CR1 &= ~USART_CR1_TXEIE	/* disable RXNE interrupt */
+//#define UART_PC_CLEAR_TC			UART_PC->ICR |= USART_ICR_TCCF		/* clear TC interrupt */
+//#define	UART_PC_CLEAR_TXE			UART_PC->ISR &= ~USART_ISR_TXE
 
 
-#define IS_UART_BT_TC					(UART_BT->ISR & USART_ISR_TC) == USART_ISR_TC
-#define IS_UART_BT_RXNE				(UART_BT->ISR & USART_ISR_RXNE) == USART_ISR_RXNE 
-#define IS_UART_BT_TXE				(UART_BT->ISR & USART_ISR_TXE) == USART_ISR_TXE
+//#define IS_UART_BT_TC					(UART_BT->ISR & USART_ISR_TC) == USART_ISR_TC
+//#define IS_UART_BT_RXNE				(UART_BT->ISR & USART_ISR_RXNE) == USART_ISR_RXNE 
+//#define IS_UART_BT_TXE				(UART_BT->ISR & USART_ISR_TXE) == USART_ISR_TXE
 
-#define IS_UART_PC_TC					(UART_PC->ISR & USART_ISR_TC) == USART_ISR_TC
-#define IS_UART_PC_RXNE				(UART_PC->ISR & USART_ISR_RXNE) == USART_ISR_RXNE
-#define IS_UART_PC_TXE				(UART_PC->ISR & USART_ISR_TXE) == USART_ISR_TXE
+//#define IS_UART_PC_TC					(UART_PC->ISR & USART_ISR_TC) == USART_ISR_TC
+//#define IS_UART_PC_RXNE				(UART_PC->ISR & USART_ISR_RXNE) == USART_ISR_RXNE
+//#define IS_UART_PC_TXE				(UART_PC->ISR & USART_ISR_TXE) == USART_ISR_TXE
 
 // TODO : replace by const uint32_t with removing from main.c 
 
-#define UART_STATE_STRING_SIZE 24 
+
 #define UART_NAME_SIZE	8
 #define UART_MODE_NAME_SIZE			16
 #define UART_SUBSTATE_NAME_SIZE	24
@@ -109,14 +109,7 @@ typedef struct
 }UartHandle;	
 
 
-void InitUart_7_8(void);
 
-void Configure_GPIO_USART7_BT(void);
-void Configure_GPIO_USART8_PC(void);
-
-void Configure_USART7_BT(void);
-void Configure_USART8_PC(void);
-void Configure_USART_7_8_IT(void);
 
 
 

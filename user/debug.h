@@ -10,16 +10,19 @@
 	#include "uart.h"
 #endif
 
+// amount of check points count
 #define ARY_CPS_PATH_COUNT 500
-#define UART_ENUM_NAME_SIZE 32
 
+//
+#define UART_STATE_RECORD_SIZE 32
+//#define UART_STATE_STRING_SIZE 24 
 
 typedef struct
 {
-	uint32_t ix;
+	uint32_t ix; // curr_row
 	uint32_t max_size;
 	
-	uint8_t ary_dbg_chk_pts [ARY_CPS_PATH_COUNT][UART_ENUM_NAME_SIZE];
+	uint8_t ary_dbg_chk_pts [ARY_CPS_PATH_COUNT][UART_STATE_RECORD_SIZE];
 } DbgCheckPointsPath;
 
 

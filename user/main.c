@@ -92,35 +92,37 @@ int main(void)
 	SystemCoreClockUpdate();
 
 	SysTick_Config(SystemCoreClock/1000);/* 1ms config with HSE 8MHz/system 48Mhz*/
-
-	Uart8_Init();
-	UartSendString(USART8, "hello", 5, CR_ON);
 	
-	Uart7_Init();
-	UartSendString(USART7, "hello7",6, CR_ON);
+	INIT_RTC_LSE();
 	
 	Max7219_Init();
 	Max7219_ClearAllDigits();
 	
-	delay_led_ms(2000);
+	delay_led_ms(1000);
 	
 	Max7219_ShowAtPositionNumber(0,6);
 	Max7219_ShowAtPositionNumber(4,7);
 	
+	Uart8_Init();
+	Uart7_Init();
+	UartConfig_InitInterrupts(USART3_8_IRQn, 0);
+	
+
+	
 
 
-	INIT_RTC_LSE();
+
 	
 //	#ifdef UDEBUG
 //		dbg_clear_dbg_cps_path(&stc_dbg_path);
 //	#endif
 //	
-//	init_uart_handles();
+	init_uart_handles();
 
 	ConfigureGPIO();
 	ConfigureExternalIT();
 
-//	InitUart_7_8();
+
 	
 	
 	

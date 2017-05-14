@@ -331,36 +331,6 @@ int main(void)
 }
 
 /******************************************************************************/
-/*                                  MAXIM 7219                                */
-/******************************************************************************/
-
-//void LatchMax7219Off(void)
-//{
-//	GPIOB->BRR = GPIO_BRR_BR_0;
-//}
-////
-//void LatchMax7219On(void)
-//{
-//	GPIOB->BSRR = GPIO_BSRR_BS_0;
-//}
-////
-//void ClkMax7219Off(void)
-//{
-//	GPIOC->BRR = GPIO_BRR_BR_0;
-//}
-////
-//void ClkMax7219On(void)
-//{
-//	GPIOC->BSRR = GPIO_BSRR_BS_0;
-//}
-////
-//void SetDataPin(uint32_t val)
-//{
-//	if(val) GPIOC->BSRR = GPIO_BSRR_BS_1;
-//	else GPIOC->BRR = GPIO_BRR_BR_1;
-//}
-
-/******************************************************************************/
 /*                             Init UART Handles                              */
 /******************************************************************************/
 

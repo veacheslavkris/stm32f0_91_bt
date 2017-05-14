@@ -39,7 +39,7 @@ uint8_t ary_dt_answer[DT_ANSW_LENGTH];
 
 
 /*------------- EXTERN Functions -------------*/
-extern void SetSysClock(void);
+//extern void SetSysClock(void);
 extern void ConfigureGPIO(void);
 extern void ConfigureExternalIT(void);
 

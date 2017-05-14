@@ -2,8 +2,14 @@
 #include "stm32f091xc.h"
 
 #include "stdint.h"
+#include "sys_clock.h" 
+
 #include "led.h"
 #include "uart.h"
+//#include "a_uart.h"
+#include "uart8.h"
+#include "uart7.h"
+
 #include "rtc.h"
 #include "maxim_7219.h"
 

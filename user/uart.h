@@ -47,18 +47,18 @@
 #define UART_SUBSTATE_NAME_SIZE	24
 
 
-typedef enum 
-{
-	CR_OFF,
-	CR_ON
-}CR_STATE;
+//typedef enum 
+//{
+//	CR_OFF,
+//	CR_ON
+//}CR_STATE;
 
-typedef struct
-{
-	uint32_t uart_error_state;
-	uint8_t chartoreceive;
-	
-} UartReceivedChar;
+//typedef struct
+//{
+//	uint32_t uart_error_state;
+//	uint8_t chartoreceive;
+//	
+//} UartReceivedChar;
 
 //typedef enum 
 //{
@@ -158,16 +158,16 @@ void InitUart_7_8(void);
 void Configure_GPIO_USART7_BT(void);
 void Configure_GPIO_USART8_PC(void);
 
-UartReceivedChar* UartGetReceivedChar(USART_TypeDef* UART);
+//UartReceivedChar* UartGetReceivedChar(USART_TypeDef* UART);
 
 
 void Configure_USART7_BT(void);
 void Configure_USART8_PC(void);
 void Configure_USART_7_8_IT(void);
-void UartSendCharCR(USART_TypeDef* UART, uint8_t);
-void UartSendError(USART_TypeDef* UART, uint8_t);
-void UartSendString(USART_TypeDef* UART, char*, uint32_t, CR_STATE);
-void UartSendBytes(USART_TypeDef* UART, uint8_t*, uint32_t, CR_STATE);
+//void UartSendCharCR(USART_TypeDef* UART, uint8_t);
+//void UartSendError(USART_TypeDef* UART, uint8_t);
+//void UartSendString(USART_TypeDef* UART, char*, uint32_t, CR_STATE);
+//void UartSendBytes(USART_TypeDef* UART, uint8_t*, uint32_t, CR_STATE);
 
 
 

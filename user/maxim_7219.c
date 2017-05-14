@@ -8,7 +8,9 @@ uint32_t ary_numbers[NUMBERS]= {DIGIT_0,DIGIT_1,DIGIT_2,DIGIT_3,DIGIT_4,DIGIT_5,
 uint32_t ary_positions[POSITIONS]= {ADDR_DIG_0,ADDR_DIG_1,ADDR_DIG_2,ADDR_DIG_3,ADDR_DIG_4,ADDR_DIG_5,ADDR_DIG_6,ADDR_DIG_7};
 
 
-//extern void SetDataPin(uint32_t);
+/******************************************************************************/
+/*                          INITIALIZATION PARAMS                             */
+/******************************************************************************/
 
 #define PORT_CLK			GPIOA 
 #define PIN_CLK_POS 	0
@@ -27,6 +29,9 @@ uint32_t ary_positions[POSITIONS]= {ADDR_DIG_0,ADDR_DIG_1,ADDR_DIG_2,ADDR_DIG_3,
 #define  SET_DATA_PIN_1		(PORT_DOUT->BSRR = 1 << PIN_DOUT_POS)	
 #define  SET_DATA_PIN_0		(PORT_DOUT->BRR = 1 << PIN_DOUT_POS)
 
+/******************************************************************************/
+/*                                                                            */
+/******************************************************************************/
 
 void Max7219_Init(void)
 {

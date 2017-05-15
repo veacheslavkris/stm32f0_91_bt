@@ -346,7 +346,7 @@ void init_uart_handles()
 	btUartHandle.bufferTX.p_ary_data = ary_bt_tx_data_1;
 	btUartHandle.bufferTX.data_size = SIZE_OF_BT_ADDRESS_DATA;
 	
-	btUartHandle.bufferRX.ary_size = SIZE_OF_UART_HANDLE_ARY;
+	btUartHandle.bufferRX.ary_size = SIZE_OF_HUART_BUFFER_ARY;
 	btUartHandle.bufferRX.p_ary_data = ary_bt_rx_data;
 	
 	btUartHandle.ary_uart_name[0] = 'B';
@@ -358,10 +358,10 @@ void init_uart_handles()
 	pcUartHandle.pUart = UART_PC;
 	
 	
-	pcUartHandle.bufferTX.ary_size = SIZE_OF_UART_HANDLE_ARY;
+	pcUartHandle.bufferTX.ary_size = SIZE_OF_HUART_BUFFER_ARY;
 	pcUartHandle.bufferTX.p_ary_data = ary_dt_tx_data;
 	
-	pcUartHandle.bufferRX.ary_size = SIZE_OF_UART_HANDLE_ARY;
+	pcUartHandle.bufferRX.ary_size = SIZE_OF_HUART_BUFFER_ARY;
 	pcUartHandle.bufferRX.p_ary_data = ary_dt_rx_data;
 	
 	pcUartHandle.ary_uart_name[0] = 'P';

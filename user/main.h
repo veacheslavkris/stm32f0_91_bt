@@ -31,12 +31,11 @@ uint8_t ary_dt_answer[DT_ANSW_LENGTH];
 		
 
 
-#define SIZE_OF_UART_HANDLE_ARY 50
+#define SIZE_OF_HUART_BUFFER_ARY 50
 #define SIZE_OF_BT_ADDRESS_DATA 26
 
 
 /*------------- EXTERN Functions -------------*/
-//extern void SetSysClock(void);
 extern void ConfigureGPIO(void);
 extern void ConfigureExternalIT(void);
 
@@ -45,10 +44,10 @@ uint8_t ary_bt_tx_data_1[SIZE_OF_BT_ADDRESS_DATA] = {"AT+RNAME? 0000,11,111281\r
 uint8_t ary_bt_tx_data_2[SIZE_OF_BT_ADDRESS_DATA] = {"AT+RNAME? 6c8f,b5,7b9846\r\n"};
 
 
-uint8_t ary_bt_rx_data[SIZE_OF_UART_HANDLE_ARY]; 
+uint8_t ary_bt_rx_data[SIZE_OF_HUART_BUFFER_ARY]; 
 
-uint8_t ary_dt_tx_data[SIZE_OF_UART_HANDLE_ARY]; 
-uint8_t ary_dt_rx_data[SIZE_OF_UART_HANDLE_ARY]; 
+uint8_t ary_dt_tx_data[SIZE_OF_HUART_BUFFER_ARY]; 
+uint8_t ary_dt_rx_data[SIZE_OF_HUART_BUFFER_ARY]; 
 
 UartHandle btUartHandle;
 UartHandle pcUartHandle;

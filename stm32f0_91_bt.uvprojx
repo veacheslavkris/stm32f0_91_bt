@@ -310,7 +310,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>0</Optim>
+            <Optim>1</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -385,11 +385,6 @@
               <FilePath>.\user\main.c</FilePath>
             </File>
             <File>
-              <FileName>exti.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\user\exti.c</FilePath>
-            </File>
-            <File>
               <FileName>rtc.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\user\rtc.c</FilePath>
@@ -403,11 +398,6 @@
               <FileName>iwdg.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\user\iwdg.c</FilePath>
-            </File>
-            <File>
-              <FileName>led.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\user\led.c</FilePath>
             </File>
             <File>
               <FileName>debug.c</FileName>
@@ -448,6 +438,16 @@
               <FileName>uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\user\uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>pa5_led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\user\pa5_led.c</FilePath>
+            </File>
+            <File>
+              <FileName>pc13btn.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\user\pc13btn.c</FilePath>
             </File>
           </Files>
         </Group>

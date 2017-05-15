@@ -68,7 +68,7 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 //	DbgCheckPointsPath stc_dbg_path = {0, ARY_CPS_PATH_COUNT};	
-
+	volatile uint32_t systick_count = 0;
 
 
 /* Private function prototypes -----------------------------------------------*/
@@ -93,12 +93,16 @@ int main(void)
 
 	SysTick_Config(SystemCoreClock/1000);/* 1ms config with HSE 8MHz/system 48Mhz*/
 	
-	INIT_RTC_LSE();
+	RtcInitLse();
+	
+	LedPA5_Init();
 	
 	Max7219_Init();
 	Max7219_ClearAllDigits();
 	
-	delay_led_ms(1000);
+	LED_ON;
+	
+	delay_systick(1000);
 	
 	Max7219_ShowAtPositionNumber(0,6);
 	Max7219_ShowAtPositionNumber(4,7);
@@ -106,8 +110,13 @@ int main(void)
 	Uart8_Init();
 	Uart7_Init();
 	UartConfig_InitInterrupts(USART3_8_IRQn, 0);
-	
 
+	BtnPc13_Init();
+
+	
+	
+	
+	LED_OFF;
 	
 
 
@@ -118,9 +127,11 @@ int main(void)
 //	#endif
 //	
 	init_uart_handles();
+	
+	
 
-	ConfigureGPIO();
-	ConfigureExternalIT();
+//	ConfigureGPIO();
+//	ConfigureExternalIT();
 
 
 	
@@ -333,6 +344,22 @@ int main(void)
 }
 
 /******************************************************************************/
+/*                               SYS TICK TIMER                               */
+/******************************************************************************/
+
+void delay_systick(uint32_t ms)
+{
+	systick_count = ms;
+	
+	while(systick_count > 0) 
+	{
+	
+	
+	}
+
+}
+
+/******************************************************************************/
 /*                             Init UART Handles                              */
 /******************************************************************************/
 
@@ -382,16 +409,6 @@ void init_uart_handles()
 /******************************************************************************/
 
 
-/******************************************************************************/
-/*                               SYSTICK DELAYS                               */
-/******************************************************************************/
-
-void delay_led_ms(uint32_t ms)
-{
-	led_ms_wait = ms;
-	
-	while(led_ms_wait !=0) continue;
-}
 
 /******************************************************************************/
 /*                        Begin Uart Transmision                              */
@@ -493,10 +510,7 @@ void HardFault_Handler(void)
 
 void SysTick_Handler(void)
 {
-	systick_ms_count++;
-	
-	if(bt_ms_wait > 0)bt_ms_wait--;
-	if(led_ms_wait > 0)led_ms_wait--;
+	if(systick_count > 0)systick_count--;
 }
 
 
@@ -514,7 +528,7 @@ void EXTI4_15_IRQHandler(void)
 		
 		
 		led_ms_wait = 0;
-		LED_OFF;	
+		LED_TOGGLE;	
 		
 
   }

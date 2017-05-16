@@ -6,12 +6,6 @@
 
 
 
-//#define UART_BT USART7
-//#define UART_PC USART8
-
-
-
-//#define	CR	0x0D
 
 /****** UART ERRORS ******/
 
@@ -49,6 +43,7 @@
 #define UART_MODE_NAME_SIZE			16
 #define UART_SUBSTATE_NAME_SIZE	24
 
+#define SIZE_OF_HUART_BUFFER_ARY 50
 
 
 typedef enum 
@@ -110,6 +105,15 @@ typedef struct
 	UartMode* pUartMode;
 	UartFuncState* pUartFuncState;
 }UartHandle;	
+
+
+void _set_uart_mode_funcstate(UartHandle* phUart, UartMode* p_mode, UartFuncState* p_funcstate);
+
+
+void set_uart_funcstate(UartHandle* phUart, UartFuncState* p_funcstate);
+void clear_data_rx(UartHandle* phUart);
+void clear_data_tx(UartHandle* phUart);
+void clear_data_char_array(uint8_t* p_ary, uint32_t size_ary);
 
 
 

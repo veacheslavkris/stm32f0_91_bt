@@ -10,7 +10,7 @@
       <TargetName>Target 1</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060300::V5.06 update 3 (build 300)::ARMCC</pCCUsed>
+      <pCCUsed>5060422::V5.06 update 4 (build 422)::ARMCC</pCCUsed>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32F091RC</Device>
@@ -448,6 +448,16 @@
               <FileName>uart_states.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\user\uart_states.c</FilePath>
+            </File>
+            <File>
+              <FileName>huart_bt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\user\huart_bt.c</FilePath>
+            </File>
+            <File>
+              <FileName>huart_pc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\user\huart_pc.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -63,7 +63,6 @@
 /* Private variables ---------------------------------------------------------*/
 	volatile uint32_t systick_count = 0;
 
-
 /* Private function prototypes -----------------------------------------------*/
 
 
@@ -336,12 +335,7 @@ void delay_systick(uint32_t ms)
 {
 	systick_count = ms;
 	
-	while(systick_count > 0) 
-	{
-	
-	
-	}
-
+	while(systick_count > 0) continue;
 }
 
 /******************************************************************************/
@@ -350,47 +344,17 @@ void delay_systick(uint32_t ms)
 
 void init_uart_handles()
 {
-	
-	btUartHandle.pUart = UART_BT;
-
-
-	btUartHandle.bufferTX.ary_size = SIZE_OF_BT_ADDRESS_DATA;
-	btUartHandle.bufferTX.p_ary_data = ary_bt_tx_data_1;
-	btUartHandle.bufferTX.data_size = SIZE_OF_BT_ADDRESS_DATA;
-	
-	btUartHandle.bufferRX.ary_size = SIZE_OF_HUART_BUFFER_ARY;
-	btUartHandle.bufferRX.p_ary_data = ary_bt_rx_data;
-	
-	btUartHandle.ary_uart_name[0] = 'B';
-	btUartHandle.ary_uart_name[1] = 'T';
-	btUartHandle.ary_uart_name[2] = ' ';
-
-	set_mode_ubt_idle();
-	
-	pcUartHandle.pUart = UART_PC;
+	HUartBt_Init();
+	SetBt_Mode_FuncState(&UartMode_Idle, &UartFState_Free);
 	
 	
-	pcUartHandle.bufferTX.ary_size = SIZE_OF_HUART_BUFFER_ARY;
-	pcUartHandle.bufferTX.p_ary_data = ary_dt_tx_data;
-	
-	pcUartHandle.bufferRX.ary_size = SIZE_OF_HUART_BUFFER_ARY;
-	pcUartHandle.bufferRX.p_ary_data = ary_dt_rx_data;
-	
-	pcUartHandle.ary_uart_name[0] = 'P';
-	pcUartHandle.ary_uart_name[1] = 'C';
-	pcUartHandle.ary_uart_name[2] = ' ';
-
-	set_mode_upc_idle();
-
-	
-	clear_data_rx(&btUartHandle);
-	clear_data_rx(&pcUartHandle);
-	
+	HUartPc_Init();
+	SetPc_Mode_FuncState(&UartMode_Idle, &UartFState_Free);
 }
 
 
 /******************************************************************************/
-/*                             Date Time Set                             */
+/*                               Date Time Set                                */
 /******************************************************************************/
 
 
@@ -414,20 +378,8 @@ void StartSendUartData_IT(UartHandle* phUart)
 
 void prepare_ac_report_for_pc(void)
 {
-	uint32_t ix = 0;
-	uint32_t bt_rx_data_size = btUartHandle.bufferRX.data_size;
-
 	
-	clear_data_tx(&pcUartHandle);
-	
-	for(ix = 0; ix < bt_rx_data_size; ix++)
-	{
-		pcUartHandle.bufferTX.p_ary_data[ix] = btUartHandle.bufferRX.p_ary_data[ix];
-	}
-	
-	pcUartHandle.bufferTX.p_ary_data[ix++]=0x0D;
-	
-	pcUartHandle.bufferTX.data_size = bt_rx_data_size + 1;
+	PrepareAcReportForPc(GetBtUartHandle());
 	
 }
 
@@ -436,38 +388,6 @@ void prepare_dt_asking_pc(void)
 
 
 }
-
-
-
-
-void clear_data_rx(UartHandle* phUart)
-{
-	clear_data_char_array(phUart->bufferRX.p_ary_data, phUart->bufferRX.ary_size);
-	
-	phUart->bufferRX.ix_ary = 0;
-	phUart->bufferRX.data_size = 0;
-}
-
-void clear_data_tx(UartHandle* phUart)
-{
-	clear_data_char_array(phUart->bufferTX.p_ary_data, phUart->bufferTX.ary_size);
-	
-
-	phUart->bufferTX.ix_ary = 0;
-	phUart->bufferTX.data_size = 0;
-}
-
-
-void clear_data_char_array(uint8_t* p_ary, uint32_t size_ary)
-{
-	uint32_t ix_ary = 0;
-	
-	for(ix_ary = 0; ix_ary < size_ary; ix_ary++)
-	{
-		p_ary[ix_ary] = '*';
-	}
-}
-
 
 /******************************************************************************/
 /*            Cortex-M0 Processor Exceptions Handlers                         */
@@ -509,8 +429,7 @@ void EXTI4_15_IRQHandler(void)
 		cycle++;
 		#endif
 		
-		set_mode_bt_request_prepare_sending();
-		
+		SetBt_Mode_FuncState(&UartMode_BT_Request, &UartFState_PrepareSending);
 		
 		led_ms_wait = 0;
 		LED_TOGGLE;	
@@ -522,21 +441,51 @@ void EXTI4_15_IRQHandler(void)
   }
 }
 
+/******************************************************************************/
+/*                       USART 7-8 Exceptions Handlers                        */
+/******************************************************************************/
+void ProcessUartIrq(UartHandle* pHUart)
+{
+	USART_TypeDef* pUart = pHUart->pUart;
+	
+	if(IsSetFlag_TC_uart(pUart))
+	{
+		pUart->ICR |= USART_ICR_TCCF;		
+		
+		set_uart_funcstate(pHUart, &UartFState_TC);
+	}
+	else if(IsSetFlag_RXNE_uart(pUart))
+	{
+		UartReceivedChar* structReceivedChar = UartGetReceivedChar(pUart);
+				
+		if(IsFuncState_RECEIVING_of(pHUart))
+		{
+			pHUart->bufferRX.p_ary_data[pHUart->bufferRX.ix_ary++] = structReceivedChar->chartoreceive;
+		}
+	}
+	else if(IsSetFlag_TXE_uart(pUart))
+	{
+		if(IsFuncState_SENDING_of(pHUart))
+		{
+			if(pHUart->bufferTX.ix_ary < pHUart->bufferTX.data_size)	
+			{
+				pUart->TDR = pHUart->bufferTX.p_ary_data[pHUart->bufferTX.ix_ary++];
+			}
+			else
+			{
+				pUart->CR1 &= ~USART_CR1_TXEIE;
+				set_uart_funcstate(pHUart, &UartFState_TcSending);
+			}
+		}
+	}
+
+}
+
 void USART3_8_IRQHandler(void)
 {
-/******************************************************************************/
-/*            USART 7 -BT- Exceptions Handlers                                */
-/******************************************************************************/
-	
-	ProcessUartIrq(&btUartHandle);
+	ProcessUartIrq(GetBtUartHandle());
 
-/******************************************************************************/
-/*            USART 8 -PC- Exceptions Handlers                                */
-/******************************************************************************/
-	ProcessUartIrq(&pcUartHandle);
-
-
-
+	ProcessUartIrq(GetPcUartHandle());
 }
 
 

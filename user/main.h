@@ -3,7 +3,7 @@
 
 #include "stdint.h"
 #include "sys_clock.h" 
-#include "uart.h"
+#include "uart_states.h"
 #include "uart8.h"
 #include "uart7.h"
 #include "rtc.h"
@@ -34,8 +34,6 @@ uint8_t ary_dt_answer[DT_ANSW_LENGTH];
 
 
 /*------------- EXTERN Functions -------------*/
-extern void ConfigureGPIO(void);
-extern void ConfigureExternalIT(void);
 
 
 uint8_t ary_bt_tx_data_1[SIZE_OF_BT_ADDRESS_DATA] = {"AT+RNAME? 0000,11,111281\r\n"}; 
@@ -54,7 +52,6 @@ void clear_data_rx(UartHandle* phUart);
 void clear_data_char_array(uint8_t* p_ary, uint32_t size_ary);
 
 /*------------- SysTick -------------*/
-volatile uint32_t systick_ms_count = 0;
 volatile uint32_t bt_ms_wait = 0;
 volatile uint32_t led_ms_wait = 0;
 

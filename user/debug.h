@@ -3,12 +3,9 @@
 
 #include "stm32f091xc.h"
 #include "stdint.h"
+#include "uart_states.h"
 
 
-
-#ifndef _UART_
-	#include "uart.h"
-#endif
 
 // amount of check points count
 #define ARY_CPS_PATH_COUNT 500

@@ -50,12 +50,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f0xx.h"
 #include "main.h"
-//#include "uart.h"
-//#include "led.h"
-
-//#include "rtc.h"
-//#include "tim_basic.h"
-//#include "iwdg.h"
 
 /** @addtogroup STM32F0_Snippets
   * @{
@@ -67,7 +61,6 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-//	DbgCheckPointsPath stc_dbg_path = {0, ARY_CPS_PATH_COUNT};	
 	volatile uint32_t systick_count = 0;
 
 
@@ -127,14 +120,6 @@ int main(void)
 //	#endif
 //	
 	init_uart_handles();
-	
-	
-
-//	ConfigureGPIO();
-//	ConfigureExternalIT();
-
-
-	
 	
 	
   while (1) /* Infinite loop */

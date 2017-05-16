@@ -1,14 +1,17 @@
+#ifndef  UART_STATES_H
+#define UART_STATES_H
+
 #include "stm32f091xc.h"
 #include "stdint.h"
 
-#define _UART_
-
-#define UART_BT USART7
-#define UART_PC USART8
 
 
+//#define UART_BT USART7
+//#define UART_PC USART8
 
-#define	CR	0x0D
+
+
+//#define	CR	0x0D
 
 /****** UART ERRORS ******/
 
@@ -110,7 +113,7 @@ typedef struct
 
 
 
-
+#endif
 
 
 

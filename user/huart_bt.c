@@ -29,7 +29,7 @@ void HUartBt_Init()
 	btUartHandle.ary_uart_name[1] = 'T';
 	btUartHandle.ary_uart_name[2] = ' ';
 	
-	clear_data_rx(&btUartHandle);
+	ClearDataRx(&btUartHandle);
 }
 //
 
@@ -114,7 +114,7 @@ uint32_t IsFuncState_uartBt_ErrTimeout()
 
 void SetBt_Mode_FuncState(UartMode* pUartMode, UartFuncState* pUartFuncState)
 {
-	_set_uart_mode_funcstate(&btUartHandle, pUartMode, pUartFuncState);
+	SetUartModeFuncState(&btUartHandle, pUartMode, pUartFuncState);
 }
 
 /******************************************************************************/

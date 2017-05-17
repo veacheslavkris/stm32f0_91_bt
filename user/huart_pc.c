@@ -26,7 +26,7 @@ void HUartPc_Init()
 	pcUartHandle.ary_uart_name[1] = 'C';
 	pcUartHandle.ary_uart_name[2] = ' ';
 
-	clear_data_rx(&pcUartHandle);
+	ClearDataRx(&pcUartHandle);
 }
 
 UartHandle* GetPcUartHandle(void)
@@ -112,7 +112,7 @@ uint32_t IsFuncState_uartPc_ErrTimeout()
 
 void SetPc_Mode_FuncState(UartMode* pUartMode, UartFuncState* pUartFuncState)
 {
-	_set_uart_mode_funcstate(&pcUartHandle, pUartMode, pUartFuncState);
+	SetUartModeFuncState(&pcUartHandle, pUartMode, pUartFuncState);
 }
 
 /******************************************************************************/
@@ -126,7 +126,7 @@ void PrepareAcReportForPc(UartHandle* pBtUartHandle)
 	uint32_t bt_rx_data_size = pBtUartHandle->bufferRX.data_size;
 
 	
-	clear_data_tx(&pcUartHandle);
+	ClearDataTx(&pcUartHandle);
 	
 	for(ix = 0; ix < bt_rx_data_size; ix++)
 	{

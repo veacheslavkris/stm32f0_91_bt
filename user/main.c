@@ -452,7 +452,7 @@ void ProcessUartIrq(UartHandle* pHUart)
 	{
 		pUart->ICR |= USART_ICR_TCCF;		
 		
-		set_uart_funcstate(pHUart, &UartFState_TC);
+		SetUartFuncState(pHUart, &UartFState_TC);
 	}
 	else if(IsSetFlag_RXNE_uart(pUart))
 	{
@@ -474,7 +474,7 @@ void ProcessUartIrq(UartHandle* pHUart)
 			else
 			{
 				pUart->CR1 &= ~USART_CR1_TXEIE;
-				set_uart_funcstate(pHUart, &UartFState_TcSending);
+				SetUartFuncState(pHUart, &UartFState_TcSending);
 			}
 		}
 	}

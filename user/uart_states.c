@@ -2,19 +2,19 @@
 #include "uart_states.h"
 
 
-void _set_uart_mode_funcstate(UartHandle* phUart, UartMode* p_mode, UartFuncState* p_funcstate)
+void SetUartModeFuncState(UartHandle* phUart, UartMode* p_mode, UartFuncState* p_funcstate)
 {
 	phUart->pUartMode = p_mode;
 	phUart->pUartFuncState = p_funcstate;
 }
 
-void set_uart_funcstate(UartHandle* phUart, UartFuncState* p_funcstate)
+void SetUartFuncState(UartHandle* phUart, UartFuncState* p_funcstate)
 {
 	phUart->pUartFuncState = p_funcstate;
 }
 
 
-void clear_data_rx(UartHandle* phUart)
+void ClearDataRx(UartHandle* phUart)
 {
 	clear_data_char_array(phUart->bufferRX.p_ary_data, phUart->bufferRX.ary_size);
 	
@@ -22,7 +22,7 @@ void clear_data_rx(UartHandle* phUart)
 	phUart->bufferRX.data_size = 0;
 }
 
-void clear_data_tx(UartHandle* phUart)
+void ClearDataTx(UartHandle* phUart)
 {
 	clear_data_char_array(phUart->bufferTX.p_ary_data, phUart->bufferTX.ary_size);
 	
@@ -31,7 +31,7 @@ void clear_data_tx(UartHandle* phUart)
 	phUart->bufferTX.data_size = 0;
 }
 
-void clear_data_char_array(uint8_t* p_ary, uint32_t size_ary)
+__INLINE void clear_data_char_array(uint8_t* p_ary, uint32_t size_ary)
 {
 	uint32_t ix_ary = 0;
 	

@@ -107,13 +107,13 @@ typedef struct
 }UartHandle;	
 
 
-void _set_uart_mode_funcstate(UartHandle* phUart, UartMode* p_mode, UartFuncState* p_funcstate);
+void SetUartModeFuncState(UartHandle* phUart, UartMode* p_mode, UartFuncState* p_funcstate);
 
 
-void set_uart_funcstate(UartHandle* phUart, UartFuncState* p_funcstate);
-void clear_data_rx(UartHandle* phUart);
-void clear_data_tx(UartHandle* phUart);
-void clear_data_char_array(uint8_t* p_ary, uint32_t size_ary);
+void SetUartFuncState(UartHandle* phUart, UartFuncState* p_funcstate);
+void ClearDataRx(UartHandle* phUart);
+void ClearDataTx(UartHandle* phUart);
+__INLINE void clear_data_char_array(uint8_t* p_ary, uint32_t size_ary);
 
 
 

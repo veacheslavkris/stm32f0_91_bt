@@ -1,8 +1,10 @@
 #ifndef HUART_BT_H
 #define HUART_BT_H
 #include "uart_states.h"
+#include "debug_uart.h"
 
-#define UART_BT USART7
+
+#define USART_BT USART7
 
 #define SIZE_OF_BT_ADDRESS_DATA 26
 
@@ -29,7 +31,7 @@ uint32_t IsFuncState_uartBt_TcntReceived(void);
 uint32_t IsFuncState_uartBt_Free(void);
 uint32_t IsFuncState_uartBt_ErrTimeout(void);
 
-void SetBt_Mode_FuncState(UartMode* pUartMode, UartFuncState* pUartFuncState);
+void SetBt_Mode_FuncState(UartModeEnum uart_mode_enm, UartFuncStateEnum uart_func_state_enm, uint32_t cycle);
 
 uint32_t IsBtRxDataFull(void);
 void SetBtRxDataSize(uint32_t size);

@@ -3,7 +3,7 @@
 
 #include "stm32f091xc.h"
 #include "stdint.h"
-
+//#include "debug_uart.h"
 
 
 
@@ -39,12 +39,18 @@
 // TODO : replace by const uint32_t with removing from main.c 
 
 
-#define UART_NAME_SIZE	8
-#define UART_MODE_NAME_SIZE			16
-#define UART_SUBSTATE_NAME_SIZE	24
+
 
 #define SIZE_OF_HUART_BUFFER_ARY 50
 
+
+
+typedef enum
+{
+	UART_PC,
+	UART_BT
+
+} UartEnum;	
 
 typedef enum 
 {
@@ -56,34 +62,21 @@ typedef enum
 
 }UartModeEnum;
 
-typedef struct
-{
-	UartModeEnum enm_mode;
-	uint8_t ary_mode_name[UART_MODE_NAME_SIZE];
-	
-}UartMode;
-
 typedef enum 
 {
 	FST_PREPARE_SENDING,
 	FST_SENDING,
-	FST_TCNT_SENT,
-	FST_TC,
+	FST_TRMNL_CNT_SENT,
+	FST_TRANSMIT_COMPLETE,
 	FST_PREPARE_RECEIVING,
 	FST_RECEIVING,
-	FST_TCNT_RECEIVED,
+	FST_TRMNL_CNT_RECEIVED,
 	FST_FREE,
 	FST_ERR_FG,
 	FST_ERR_DATA,
 	FST_ERR_TIMEOUT
 
 }UartFuncStateEnum;
-
-typedef struct
-{
-	UartFuncStateEnum enm_funcstate;
-	uint8_t ary_fst_name[UART_SUBSTATE_NAME_SIZE];
-}UartFuncState;
 
 typedef struct
 {
@@ -98,19 +91,22 @@ typedef struct
 typedef struct
 {
 	USART_TypeDef* pUart;
+	UartEnum uart_enm;
+	
 	UartStructData bufferRX;
 	UartStructData bufferTX;
-	uint8_t ary_uart_name[UART_NAME_SIZE];
-	
-	UartMode* pUartMode;
-	UartFuncState* pUartFuncState;
+		
+	UartModeEnum uart_mode_enm;
+	UartFuncStateEnum uart_func_state_enm;
+
+
 }UartHandle;	
 
 
-void SetUartModeFuncState(UartHandle* phUart, UartMode* p_mode, UartFuncState* p_funcstate);
+void SetUartModeFuncState(UartHandle* phUart, UartModeEnum uart_mode_enm, UartFuncStateEnum uart_funcstate_enm);
 
 
-void SetUartFuncState(UartHandle* phUart, UartFuncState* p_funcstate);
+void SetUartFuncState(UartHandle* phUart, UartFuncStateEnum uart_funcstate_enm);
 void ClearDataRx(UartHandle* phUart);
 void ClearDataTx(UartHandle* phUart);
 __INLINE void clear_data_char_array(uint8_t* p_ary, uint32_t size_ary);

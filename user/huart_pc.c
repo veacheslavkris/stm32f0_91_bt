@@ -2,8 +2,8 @@
 #include "uart_states.h"
 
 
-	#define PC_UART_MODE_ENUM					(pcUartHandle.pUartMode->enm_mode)
-	#define PC_UART_FUNC_STATE_ENUM		(pcUartHandle.pUartFuncState->enm_funcstate)
+	#define PC_UART_MODE_ENUM					(pcUartHandle.uart_mode_enm)
+	#define PC_UART_FUNC_STATE_ENUM		(pcUartHandle.uart_func_state_enm)
 
 
 	UartHandle pcUartHandle;
@@ -13,8 +13,8 @@
 
 void HUartPc_Init()
 {
-	pcUartHandle.pUart = UART_PC;
-	
+	pcUartHandle.pUart = USART_PC;
+	pcUartHandle.uart_enm = UART_PC;
 	
 	pcUartHandle.bufferTX.ary_size = SIZE_OF_HUART_BUFFER_ARY;
 	pcUartHandle.bufferTX.p_ary_data = ary_dt_tx_data;
@@ -22,11 +22,9 @@ void HUartPc_Init()
 	pcUartHandle.bufferRX.ary_size = SIZE_OF_HUART_BUFFER_ARY;
 	pcUartHandle.bufferRX.p_ary_data = ary_dt_rx_data;
 	
-	pcUartHandle.ary_uart_name[0] = 'P';
-	pcUartHandle.ary_uart_name[1] = 'C';
-	pcUartHandle.ary_uart_name[2] = ' ';
-
 	ClearDataRx(&pcUartHandle);
+	
+	
 }
 
 UartHandle* GetPcUartHandle(void)
@@ -73,12 +71,12 @@ uint32_t IsFuncState_uartPc_Sending()
 
 uint32_t IsFuncState_uartPc_TcntSent()
 {
-		return (PC_UART_FUNC_STATE_ENUM == FST_TCNT_SENT);
+		return (PC_UART_FUNC_STATE_ENUM == FST_TRMNL_CNT_SENT);
 }
 
 uint32_t IsFuncState_uartPc_TC()
 {
-		return (PC_UART_FUNC_STATE_ENUM == FST_TC);
+		return (PC_UART_FUNC_STATE_ENUM == FST_TRANSMIT_COMPLETE);
 }
 
 uint32_t IsFuncState_uartPc_PrepareReceiving()
@@ -93,7 +91,7 @@ uint32_t IsFuncState_uartPc_Receiving()
 
 uint32_t IsFuncState_uartPc_TcntReceived()
 {
-		return (PC_UART_FUNC_STATE_ENUM == FST_TCNT_RECEIVED);
+		return (PC_UART_FUNC_STATE_ENUM == FST_TRMNL_CNT_RECEIVED);
 }
 
 uint32_t IsFuncState_uartPc_Free()
@@ -110,9 +108,11 @@ uint32_t IsFuncState_uartPc_ErrTimeout()
 /*                 FUNCTION STATES OF PC UARTS : SETTING                      */
 /******************************************************************************/
 
-void SetPc_Mode_FuncState(UartMode* pUartMode, UartFuncState* pUartFuncState)
+void SetPc_Mode_FuncState(UartModeEnum uart_mode_enm, UartFuncStateEnum uart_func_state_enm, uint32_t cycle)
 {
-	SetUartModeFuncState(&pcUartHandle, pUartMode, pUartFuncState);
+	SetUartModeFuncState(&pcUartHandle, uart_mode_enm, uart_func_state_enm);
+	
+	DebugUartSetCheckPoint(&pcUartHandle, cycle);
 }
 
 /******************************************************************************/

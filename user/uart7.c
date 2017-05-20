@@ -5,7 +5,7 @@
 #define PIN_RX_D_POS		1
 #define ALT_FUNC				ALT_FUNC_1
 
-#define UART						USART7
+#define USART						USART7
 
 
 void Uart7_Init(void)
@@ -17,7 +17,10 @@ void Uart7_Init(void)
 
 	/* Enable the peripheral clock USART8 */
   RCC->APB2ENR |= RCC_APB2ENR_USART7EN;
-	UartConfigBrrTeReUe(UART, 6000000, 38400);
+	UartConfigBrrTeReUe(USART, 6000000, 38400);
+	
+	UartConfig_TC_TXNE_IE_Enable(USART);
+	UartConfig_InitInterrupts(USART3_8_IRQn, 0);
 
 }
 

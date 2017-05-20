@@ -62,6 +62,7 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 	volatile uint32_t systick_count = 0;
+	volatile uint32_t cycle_cnt = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -92,35 +93,23 @@ int main(void)
 	Max7219_Init();
 	Max7219_ClearAllDigits();
 	
-	LED_ON;
+
 	
 	delay_systick(1000);
 	
-	Max7219_ShowAtPositionNumber(0,6);
-	Max7219_ShowAtPositionNumber(4,7);
+	Max7219_ShowAtPositionNumber(0,0);
+	Max7219_ShowAtPositionNumber(4,0);
 	
-	Uart8_Init();
-	Uart7_Init();
-	UartConfig_InitInterrupts(USART3_8_IRQn, 0);
+
+	
+
 
 	BtnPc13_Init();
 
+	init_uarts();	
 	
-	
-	
-	LED_OFF;
 	
 
-
-
-	
-//	#ifdef UDEBUG
-//		dbg_clear_dbg_cps_path(&stc_dbg_path);
-//	#endif
-//	
-	init_uart_handles();
-	
-	
   while (1) /* Infinite loop */
   {
 
@@ -128,6 +117,16 @@ int main(void)
 		{
 			if(IsFuncState_uartBt_PrepareSending())
 			{
+				uart_bt_request_prepare_sending();
+				
+					//		if(IS_BT_UART_STATE_ASKING_PREPARE)
+					//		{
+					//			clear_data_rx(&btUartHandle);
+					//		
+					//			set_bt_uart_state_address_sending();
+					//			StartSendUartData_IT(&btUartHandle);
+					//	
+					//		}
 			}
 			else if(IsFuncState_uartBt_Sending())
 			{
@@ -140,15 +139,64 @@ int main(void)
 			}
 			else if(IsFuncState_uartBt_PrepareReceiving())
 			{
+					//		else if(IS_BT_UART_STATE_LISTENING_PREPARE)
+					//		{
+					//			// prepare timeout of answer
+					//			START_BT_TIMEOUT;
+					//			set_bt_uart_state_answ_listening();
+					//		}
 			}
 			else if(IsFuncState_uartBt_Receiving())
 			{
+					//		else if(IS_BT_UART_STATE_ANSW_LISTENING)
+					//		{
+					//			while(IS_BT_UART_STATE_ANSW_LISTENING)
+					//			{
+					//				// check for timeout
+					//				if(IS_BT_TIMEOUT_DONE)
+					//				{
+					//					set_bt_uart_state_err_timeout();
+					//				}
+					//				
+					//				// did we get as minimum 1 char ? 
+					//				if(BT_RX_BUFF_IX_ARY > 0)
+					//				{
+					//					// as minimum 1 char we have got
+					//					if(BT_RX_BUFF_IX_ARY == 1)
+					//					{
+					//						// we have got 1 char
+					//						// using this char we select expecting answer size 
+					//						select_bt_rx_buff_size();
+					//						
+					//						if( BT_RX_BUFF_DATA_SIZE == 0)
+					//						{
+					//							// not expected first answer char
+					//							set_bt_uart_state_err_data();
+					//						}
+					//					} //if(dtAnswerStruct.data_size == 0)
+					//					else if(BT_RX_BUFF_IX_ARY == BT_RX_BUFF_DATA_SIZE) //if(dtAnswerStruct.data_size > 0)
+					//					{
+					//						set_bt_uart_state_answ_done();
+					//					} //else //if(dtAnswerStruct.data_size > 0)
+					//				} //if(dtAnswerStruct.ix_ary > 0)
+					//			} //while(STATE_DT_ANSW_GET == curState)
+					//		}
 			}
 			else if(IsFuncState_uartBt_TcntReceived())
 			{	
+					//		else if(IS_BT_UART_STATE_ANSW_DONE)
+					//		{
+					//			set_bt_uart_state_downtime();
+					//			set_pc_uart_state_ac_reporting_prepare();
+					//		}
 			}
 			else if(IsFuncState_uartBt_ErrTimeout())
 			{
+					//		else if(IS_BT_UART_STATE_ERR_TIMEOUT)
+					//		{
+					//			LedBlockIndicating(100,100,10);
+					//			set_bt_uart_state_downtime();
+					//		}
 			}
 		}
 		
@@ -157,6 +205,12 @@ int main(void)
 		{
 			if(IsFuncState_uartPc_PrepareSending())
 			{
+					//		if(IS_PC_UART_STATE_DT_ASKING_PREPARE)
+					//		{
+					//			prepare_dt_asking_pc();
+					//			set_pc_uart_state_dt_ask_sending();
+					//			StartSendUartData_IT(&pcUartHandle);
+					//		}
 			}
 			else if(IsFuncState_uartPc_Sending())
 			{
@@ -165,10 +219,18 @@ int main(void)
 			{
 			}
 			else if(IsFuncState_uartPc_TC())
-			{		
+			{	
+					//		else if(IS_PC_UART_STATE_SENDING_DONE)
+					//		{
+					//			set_pc_uart_state_downtime();
+					//		}				
 			}
 			else if(IsFuncState_uartPc_PrepareReceiving())
 			{
+					//		else if(IS_PC_UART_STATE_DT_LISTENING_PREPARE)
+					//		{
+					//			set_pc_uart_state_downtime();
+					//		}
 			}
 			else if(IsFuncState_uartPc_Receiving())
 			{
@@ -185,6 +247,12 @@ int main(void)
 		{
 			if(IsFuncState_uartPc_PrepareSending())
 			{
+					//		else if(IS_PC_UART_STATE_AC_REPORTING_PREPARE)
+					//		{
+					//			prepare_ac_report_for_pc();
+					//			set_pc_uart_state_ac_report_sending();
+					//			StartSendUartData_IT(&pcUartHandle);
+					//		}
 			}
 			else if(IsFuncState_uartPc_Sending())
 			{
@@ -199,121 +267,28 @@ int main(void)
 		
 		if((IsMode_UBt_Idle())&&(IsMode_UPc_Idle()))
 		{
-		
+			LED_ON;
 		
 		}
 		
 		
 		
-//		if(IS_BT_UART_STATE_ASKING_PREPARE)
-//		{
-
-//			clear_data_rx(&btUartHandle);
-//		
-//			set_bt_uart_state_address_sending();
-//			StartSendUartData_IT(&btUartHandle);
-//	
-//		}
-//		else if(IS_BT_UART_STATE_ADDRESS_SENDING)
-//		{
-//		
-//		}
-//		else if(IS_BT_UART_STATE_SENDING_DONE)
-//		{
-//			
-//		}
-//		else if(IS_BT_UART_STATE_LISTENING_PREPARE)
-//		{
-//			// prepare timeout of answer
-//			
-//			START_BT_TIMEOUT;
-//			set_bt_uart_state_answ_listening();
-//		}
-//		else if(IS_BT_UART_STATE_ANSW_LISTENING)
-//		{
-
-//			
-//			while(IS_BT_UART_STATE_ANSW_LISTENING)
-//			{
-//				// check for timeout
-//				if(IS_BT_TIMEOUT_DONE)
-//				{
-//					set_bt_uart_state_err_timeout();
-//				}
-//				
-//				// did we get as minimum 1 char ? 
-//				if(BT_RX_BUFF_IX_ARY > 0)
-//				{
-//					// as minimum 1 char we have got
-//					if(BT_RX_BUFF_IX_ARY == 1)
-//					{
-//						// we have got 1 char
-//						// using this char we select expecting answer size 
-//						select_bt_rx_buff_size();
-//						
-//						if( BT_RX_BUFF_DATA_SIZE == 0)
-//						{
-//							// not expected first answer char
-//							set_bt_uart_state_err_data();
-//						}
-//											
-//					} //if(dtAnswerStruct.data_size == 0)
-//					else if(BT_RX_BUFF_IX_ARY == BT_RX_BUFF_DATA_SIZE) //if(dtAnswerStruct.data_size > 0)
-//					{
-//						set_bt_uart_state_answ_done();
-//					} //else //if(dtAnswerStruct.data_size > 0)
-//				
-//				} //if(dtAnswerStruct.ix_ary > 0)
-//				
-//			
-//			} //while(STATE_DT_ANSW_GET == curState)
-//			
-//		}
-//		else if(IS_BT_UART_STATE_ERR_TIMEOUT)
-//		{
-//			LedBlockIndicating(100,100,10);
-
-//			set_bt_uart_state_downtime();
-//		}
-
-//		else if(IS_BT_UART_STATE_ANSW_DONE)
-//		{
-//			set_bt_uart_state_downtime();
-//			
-//			set_pc_uart_state_ac_reporting_prepare();
-//			
-//		}
 
 
-//		
-//		if(IS_PC_UART_STATE_DT_ASKING_PREPARE)
-//		{
-//			prepare_dt_asking_pc();
-//			
-//			set_pc_uart_state_dt_ask_sending();
-//			StartSendUartData_IT(&pcUartHandle);
-//		}
-//		else if(IS_PC_UART_STATE_DT_ASK_SENDING){}
-//		else if(IS_PC_UART_STATE_DT_LISTENING_PREPARE)
-//		{
-////			set_pc_uart_state_downtime();
-//		}
-//		else if(IS_PC_UART_STATE_DT_ANSW_LISTENING){}
-//		else if(IS_PC_UART_STATE_AC_REPORTING_PREPARE)
-//		{
-//			prepare_ac_report_for_pc();
-//			
-//			set_pc_uart_state_ac_report_sending();
-//			StartSendUartData_IT(&pcUartHandle);
-//		}
-//		else if(IS_PC_UART_STATE_SENDING_DONE)
-//		{
-//			set_pc_uart_state_downtime();
-//		}
-//		else if(IS_PC_UART_STATE_AC_REPORT_SENDING){}
-//		else if(IS_PC_UART_STATE_ERR_TIMEOUT){}
-//		else if(IS_PC_UART_STATE_ANSW_DONE){}
-//		else if(IS_PC_UART_STATE_DOWNTIME){}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		
 	
 //		while((IS_PC_UART_STATE_DOWNTIME)&&(IS_BT_UART_STATE_DOWNTIME))
@@ -342,14 +317,19 @@ void delay_systick(uint32_t ms)
 /*                             Init UART Handles                              */
 /******************************************************************************/
 
-void init_uart_handles()
+void init_uarts()
 {
+	
+	DebugUart_Init();
+	
+	Uart8_Init();
+	Uart7_Init();
+		
 	HUartBt_Init();
-	SetBt_Mode_FuncState(&UartMode_Idle, &UartFState_Free);
-	
-	
+	SetBt_Mode_FuncState(MODE_IDLE, FST_FREE, cycle_cnt);
+		
 	HUartPc_Init();
-	SetPc_Mode_FuncState(&UartMode_Idle, &UartFState_Free);
+	SetPc_Mode_FuncState(MODE_IDLE, FST_FREE, cycle_cnt);
 }
 
 
@@ -383,9 +363,9 @@ void prepare_ac_report_for_pc(void)
 	
 }
 
-void prepare_dt_asking_pc(void)
+void uart_bt_request_prepare_sending(void)
 {
-
+	Max7219_ShowAtPositionNumber(0, cycle_cnt);
 
 }
 
@@ -425,11 +405,11 @@ void EXTI4_15_IRQHandler(void)
   {
     EXTI->PR |= EXTI_PR_PR13; /* Clear the pending bit */
 
-		#ifdef UDEBUG
-		cycle++;
-		#endif
 		
-		SetBt_Mode_FuncState(&UartMode_BT_Request, &UartFState_PrepareSending);
+		cycle_cnt++;
+		
+		
+		SetBt_Mode_FuncState(MODE_BT_REQUEST, FST_PREPARE_SENDING, cycle_cnt);
 		
 		led_ms_wait = 0;
 		LED_TOGGLE;	
@@ -452,7 +432,7 @@ void ProcessUartIrq(UartHandle* pHUart)
 	{
 		pUart->ICR |= USART_ICR_TCCF;		
 		
-		SetUartFuncState(pHUart, &UartFState_TC);
+		SetUartFuncState(pHUart, FST_TRANSMIT_COMPLETE);
 	}
 	else if(IsSetFlag_RXNE_uart(pUart))
 	{
@@ -474,7 +454,7 @@ void ProcessUartIrq(UartHandle* pHUart)
 			else
 			{
 				pUart->CR1 &= ~USART_CR1_TXEIE;
-				SetUartFuncState(pHUart, &UartFState_TcSending);
+				SetUartFuncState(pHUart, FST_TRMNL_CNT_SENT);
 			}
 		}
 	}

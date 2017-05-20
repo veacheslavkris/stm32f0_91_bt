@@ -400,11 +400,6 @@
               <FilePath>.\user\iwdg.c</FilePath>
             </File>
             <File>
-              <FileName>debug.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\user\debug.c</FilePath>
-            </File>
-            <File>
               <FileName>maxim_7219.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\user\maxim_7219.c</FilePath>
@@ -458,6 +453,11 @@
               <FileName>huart_pc.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\user\huart_pc.c</FilePath>
+            </File>
+            <File>
+              <FileName>debug_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\user\debug_uart.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -2,15 +2,15 @@
 #include "uart_states.h"
 
 
-void SetUartModeFuncState(UartHandle* phUart, UartMode* p_mode, UartFuncState* p_funcstate)
+void SetUartModeFuncState(UartHandle* phUart, UartModeEnum uart_mode_enm, UartFuncStateEnum uart_funcstate_enm)
 {
-	phUart->pUartMode = p_mode;
-	phUart->pUartFuncState = p_funcstate;
+	phUart->uart_mode_enm = uart_mode_enm;
+	phUart->uart_func_state_enm = uart_funcstate_enm;
 }
 
-void SetUartFuncState(UartHandle* phUart, UartFuncState* p_funcstate)
+void SetUartFuncState(UartHandle* phUart, UartFuncStateEnum uart_funcstate_enm)
 {
-	phUart->pUartFuncState = p_funcstate;
+	phUart->uart_func_state_enm = uart_funcstate_enm;
 }
 
 

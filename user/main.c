@@ -364,7 +364,7 @@ void prepare_ac_report_for_pc(void)
 }
 
 void uart_bt_request_prepare_sending(void)
-{
+{ 
 	Max7219_ShowAtPositionNumber(0, cycle_cnt);
 
 }
@@ -376,7 +376,6 @@ void uart_bt_request_prepare_sending(void)
 void NMI_Handler(void)
 {
 }
-
 
 void HardFault_Handler(void)
 {

@@ -12,14 +12,14 @@ uint32_t ary_positions[POSITIONS]= {ADDR_DIG_0,ADDR_DIG_1,ADDR_DIG_2,ADDR_DIG_3,
 /*                          INITIALIZATION PARAMS                             */
 /******************************************************************************/
 
-#define PORT_CLK			GPIOA 
-#define PIN_CLK_POS 	0
+#define PORT_CLK			GPIOC 
+#define PIN_CLK_POS 	5
 
-#define PORT_DOUT			GPIOA 
-#define PIN_DOUT_POS	1
+#define PORT_DOUT			GPIOC 
+#define PIN_DOUT_POS	8
 
-#define PORT_LATCH		GPIOA 
-#define PIN_LATCH_POS	4
+#define PORT_LATCH		GPIOC
+#define PIN_LATCH_POS	6
 
 
 #define  LATCH_OFF				(PORT_LATCH->BRR = 1 << PIN_LATCH_POS	)
@@ -35,11 +35,11 @@ uint32_t ary_positions[POSITIONS]= {ADDR_DIG_0,ADDR_DIG_1,ADDR_DIG_2,ADDR_DIG_3,
 
 void Max7219_Init(void)
 {
-	RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
+	RCC->AHBENR |= RCC_AHBENR_GPIOCEN;
 	
-	GpioSetModeOutputStrong(GPIOA, PIN_CLK_POS, OSPEEDR_HIGH);
-	GpioSetModeOutputStrong(GPIOA, PIN_DOUT_POS, OSPEEDR_HIGH);
-	GpioSetModeOutputStrong(GPIOA, PIN_LATCH_POS, OSPEEDR_HIGH);
+	GpioSetModeOutputStrong(PORT_CLK, PIN_CLK_POS, OSPEEDR_HIGH);
+	GpioSetModeOutputStrong(PORT_DOUT, PIN_DOUT_POS, OSPEEDR_HIGH);
+	GpioSetModeOutputStrong(PORT_LATCH, PIN_LATCH_POS, OSPEEDR_HIGH);
 	
 	
 	config_max7219(ADDR_DECODE_MODE, NO_DECODE_FOR_DIGITS);

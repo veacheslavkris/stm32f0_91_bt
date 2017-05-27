@@ -48,7 +48,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f0xx.h"
+//#include "stm32f0xx.h"
 #include "main.h"
 
 /** @addtogroup STM32F0_Snippets
@@ -63,6 +63,9 @@
 /* Private variables ---------------------------------------------------------*/
 	volatile uint32_t systick_count = 0;
 	volatile uint32_t cycle_cnt = 0;
+	volatile uint32_t max7219_cnt = 0;
+
+	StructDecToBcd structDecToBcd;
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -87,6 +90,8 @@ int main(void)
 	SysTick_Config(SystemCoreClock/1000);/* 1ms config with HSE 8MHz/system 48Mhz*/
 	
 	RtcInitLse();
+	
+	init_converter();
 	
 	LedPA5_Init();
 	
@@ -118,6 +123,9 @@ int main(void)
 			if(IsFuncState_uartBt_PrepareSending())
 			{
 				uart_bt_request_prepare_sending();
+				
+				SetBt_Mode_FuncState(MODE_IDLE, FST_FREE, cycle_cnt);
+
 				
 					//		if(IS_BT_UART_STATE_ASKING_PREPARE)
 					//		{
@@ -268,6 +276,16 @@ int main(void)
 		if((IsMode_UBt_Idle())&&(IsMode_UPc_Idle()))
 		{
 			LED_ON;
+			
+			if(systick_count == 0)
+			{
+				delay_systick(1000);
+				structDecToBcd.dec = ++max7219_cnt;
+				
+				ConvertDecToBcd(&structDecToBcd);
+				Max7219_DisplayBcdArray(LEFT_ZERO, structDecToBcd.ary_bcd);
+				
+			}
 		
 		}
 		
@@ -300,6 +318,15 @@ int main(void)
 		
 		
   }
+}
+
+/******************************************************************************/
+/*                                  GENERAL                                   */
+/******************************************************************************/
+
+void init_converter()
+{
+	structDecToBcd.digits_count = 10;
 }
 
 /******************************************************************************/
@@ -365,7 +392,15 @@ void prepare_ac_report_for_pc(void)
 
 void uart_bt_request_prepare_sending(void)
 { 
-	Max7219_ShowAtPositionNumber(0, cycle_cnt);
+	
+	structDecToBcd.dec = cycle_cnt;
+	
+	ConvertDecToBcd(&structDecToBcd);
+	
+	Max7219_DisplayBcdArray(LEFT_ZERO, structDecToBcd.ary_bcd);
+//	Max7219_ShowAtPositionNumber(0, cycle_cnt);
+	
+	
 
 }
 

@@ -2,7 +2,7 @@
 #define UART_STATES_H
 
 #include "stm32f091xc.h"
-#include "stdint.h"
+//#include "stdint.h"
 //#include "debug_uart.h"
 
 

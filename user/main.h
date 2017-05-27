@@ -1,4 +1,7 @@
-#include "stm32f0xx.h"
+//#include "stm32f0xx.h"
+
+#include "stm32f091xc.h"
+
 
 #include "sys_clock.h" 
 #include "rtc.h"
@@ -11,6 +14,7 @@
 
 #include "huart_bt.h"
 #include "huart_pc.h"
+#include "DecBcdCharConverter.h"
 
 
 
@@ -97,5 +101,5 @@ void StartSendUartData_IT(UartHandle* phUart);
 
 void ProcessUartIrq(UartHandle* pHUart);
 
-
+void init_converter(void);
 

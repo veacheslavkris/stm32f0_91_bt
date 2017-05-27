@@ -1,4 +1,5 @@
-#include "stdint.h"
+//#include "stdint.h"
+#include "stm32f091xc.h"
 
 #define IWDG_REFRESH      (uint32_t)(0x0000AAAA)
 #define IWDG_WRITE_ACCESS (uint32_t)(0x00005555)

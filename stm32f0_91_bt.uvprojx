@@ -459,6 +459,11 @@
               <FileType>1</FileType>
               <FilePath>.\user\debug_uart.c</FilePath>
             </File>
+            <File>
+              <FileName>DecBcdCharConverter.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\user\DecBcdCharConverter.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

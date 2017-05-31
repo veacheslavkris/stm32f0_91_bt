@@ -385,11 +385,6 @@
               <FilePath>.\user\main.c</FilePath>
             </File>
             <File>
-              <FileName>rtc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\user\rtc.c</FilePath>
-            </File>
-            <File>
               <FileName>tim_basic.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\user\tim_basic.c</FilePath>
@@ -463,6 +458,11 @@
               <FileName>DecBcdCharConverter.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\user\DecBcdCharConverter.c</FilePath>
+            </File>
+            <File>
+              <FileName>rtc_lse_32768.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\user\rtc_lse_32768.c</FilePath>
             </File>
           </Files>
         </Group>

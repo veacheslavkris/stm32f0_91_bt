@@ -4,7 +4,7 @@
 
 
 #include "sys_clock.h" 
-#include "rtc.h"
+#include "rtc_lse_32768.h"
 #include "maxim_7219.h"
 #include "pc13btn.h"
 #include "pa5_led.h"
@@ -41,30 +41,6 @@ volatile uint32_t led_ms_wait = 0;
 /*                        ProcessUartIrq CHECK STATE                          */
 /******************************************************************************/
 
-__INLINE uint32_t IsSetFlag_TC_uart(USART_TypeDef* pUART)
-{
-	return (pUART->ISR & USART_ISR_TC);
-}
-
-__INLINE uint32_t IsSetFlag_RXNE_uart(USART_TypeDef* pUART)
-{
-	return (pUART->ISR & USART_ISR_RXNE);
-}
-
-__INLINE uint32_t IsSetFlag_TXE_uart(USART_TypeDef* pUART)
-{
-	return (pUART->ISR & USART_ISR_TXE);
-}
-
-__INLINE uint32_t IsFuncState_RECEIVING_of(UartHandle* pHUart)
-{
-	return (pHUart->uart_func_state_enm == FST_RECEIVING);
-}
-
-__INLINE uint32_t IsFuncState_SENDING_of(UartHandle* pHUart)
-{
-	return (pHUart->uart_func_state_enm == FST_SENDING);
-}
 
 
 
@@ -102,4 +78,4 @@ void StartSendUartData_IT(UartHandle* phUart);
 void ProcessUartIrq(UartHandle* pHUart);
 
 void init_converter(void);
-
+void init_time(void);

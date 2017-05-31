@@ -212,6 +212,20 @@
       <pszMrule></pszMrule>
       <pSingCmds></pSingCmds>
       <pMultCmds></pMultCmds>
+      <SystemViewers>
+        <Entry>
+          <Name>System Viewer\PWR</Name>
+          <WinId>35903</WinId>
+        </Entry>
+        <Entry>
+          <Name>System Viewer\RCC</Name>
+          <WinId>35905</WinId>
+        </Entry>
+        <Entry>
+          <Name>System Viewer\RTC</Name>
+          <WinId>35904</WinId>
+        </Entry>
+      </SystemViewers>
     </TargetOption>
   </Target>
 
@@ -240,18 +254,6 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\user\rtc.c</PathWithFileName>
-      <FilenameWithoutPath>rtc.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>1</GroupNumber>
-      <FileNumber>3</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
       <PathWithFileName>.\user\tim_basic.c</PathWithFileName>
       <FilenameWithoutPath>tim_basic.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
@@ -259,7 +261,7 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>4</FileNumber>
+      <FileNumber>3</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -271,7 +273,7 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>5</FileNumber>
+      <FileNumber>4</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -283,7 +285,7 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>6</FileNumber>
+      <FileNumber>5</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -295,7 +297,7 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>7</FileNumber>
+      <FileNumber>6</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -307,7 +309,7 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>8</FileNumber>
+      <FileNumber>7</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -319,7 +321,7 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>9</FileNumber>
+      <FileNumber>8</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -331,7 +333,7 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>10</FileNumber>
+      <FileNumber>9</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -343,7 +345,7 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>11</FileNumber>
+      <FileNumber>10</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -355,7 +357,7 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>12</FileNumber>
+      <FileNumber>11</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -367,7 +369,7 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>13</FileNumber>
+      <FileNumber>12</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -379,9 +381,9 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>14</FileNumber>
+      <FileNumber>13</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>.\user\huart_bt.c</PathWithFileName>
@@ -391,9 +393,9 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>15</FileNumber>
+      <FileNumber>14</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>.\user\huart_pc.c</PathWithFileName>
@@ -403,7 +405,7 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>16</FileNumber>
+      <FileNumber>15</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -415,13 +417,25 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>17</FileNumber>
+      <FileNumber>16</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>.\user\DecBcdCharConverter.c</PathWithFileName>
       <FilenameWithoutPath>DecBcdCharConverter.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>17</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\user\rtc_lse_32768.c</PathWithFileName>
+      <FilenameWithoutPath>rtc_lse_32768.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

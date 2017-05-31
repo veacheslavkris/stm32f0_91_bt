@@ -89,7 +89,13 @@ int main(void)
 
 	SysTick_Config(SystemCoreClock/1000);/* 1ms config with HSE 8MHz/system 48Mhz*/
 	
-	RtcInitLse();
+	if(!IsRTC_Run()) 
+	{
+		RtcLse32768_Init();
+		init_time();
+	}
+	
+	
 	
 	init_converter();
 	
@@ -323,6 +329,44 @@ int main(void)
 /******************************************************************************/
 /*                                  GENERAL                                   */
 /******************************************************************************/
+void init_time(void)
+{
+	/* Date Time Structure from PC
+		
+	byte[] ary_date_time = new byte[11];
+		
+	ary_date_time[0] = (byte)'$';
+	ary_date_time[1] = Hours;          // hours
+	ary_date_time[2] = Minutes;           // minutes
+	ary_date_time[3] = Seconds;           // seconds
+	ary_date_time[4] = (byte)'w';   
+	ary_date_time[5] = WeekDay;           // weekday
+	ary_date_time[6] = (byte)'%';
+	ary_date_time[7] = Day;           // Month
+	ary_date_time[8] = Month;           // Day
+	ary_date_time[9] = Year;           // Year
+	ary_date_time[10] = (byte)'!';
+		
+	*/
+	
+	
+	uint8_t ary_date_time[11];
+	ary_date_time[0] = '$';
+	ary_date_time[1] = 18;		// hours
+	ary_date_time[2] = 30;		// minutes
+	ary_date_time[3] = 00;		// seconds
+	ary_date_time[4] = 'w';   
+	ary_date_time[5] = 3;			// weekday
+	ary_date_time[6] = '%';
+	ary_date_time[7] = 31;		// Month
+	ary_date_time[8] = 5;			// Day
+	ary_date_time[9] = 17;		// Year
+	ary_date_time[10] = '!';
+	
+	RtcSetDateTime(ary_date_time);
+}
+
+
 
 void init_converter()
 {
@@ -462,33 +506,33 @@ void ProcessUartIrq(UartHandle* pHUart)
 {
 	USART_TypeDef* pUart = pHUart->pUart;
 	
-	if(IsSetFlag_TC_uart(pUart))
+	if(pUart->ISR & USART_ISR_TC)	// TRANSMIT COMPLETE STATE
 	{
 		pUart->ICR |= USART_ICR_TCCF;		
-		
 		SetUartFuncState(pHUart, FST_TRANSMIT_COMPLETE);
 	}
-	else if(IsSetFlag_RXNE_uart(pUart))
+	else if(pUart->ISR & USART_ISR_RXNE)	// RXNE STATE
 	{
 		UartReceivedChar* structReceivedChar = UartGetReceivedChar(pUart);
 				
-		if(IsFuncState_RECEIVING_of(pHUart))
+		if(pHUart->uart_func_state_enm == FST_RECEIVING) // IS RECEIVING STATE
 		{
 			pHUart->bufferRX.p_ary_data[pHUart->bufferRX.ix_ary++] = structReceivedChar->chartoreceive;
 		}
+		// else as state is not receiving ignore received data
 	}
-	else if(IsSetFlag_TXE_uart(pUart))
+	else if(pUart->ISR & USART_ISR_TXE)	// TXE STATE
 	{
-		if(IsFuncState_SENDING_of(pHUart))
+		if(pHUart->uart_func_state_enm == FST_SENDING) // IS SENDING STATE
 		{
-			if(pHUart->bufferTX.ix_ary < pHUart->bufferTX.data_size)	
+			if(pHUart->bufferTX.ix_ary < pHUart->bufferTX.data_size)	// SENDING IS NOT COMPLETE
 			{
 				pUart->TDR = pHUart->bufferTX.p_ary_data[pHUart->bufferTX.ix_ary++];
 			}
-			else
+			else // TERMINAL COUNT IS BEING SENT, SENDING IS COMPLETE
 			{
 				pUart->CR1 &= ~USART_CR1_TXEIE;
-				SetUartFuncState(pHUart, FST_TRMNL_CNT_SENT);
+				pHUart->uart_func_state_enm = FST_TRMNL_CNT_SENT;
 			}
 		}
 	}

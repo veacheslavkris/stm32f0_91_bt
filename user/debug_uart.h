@@ -6,12 +6,12 @@
 #include "uart_states.h"
 
 
-#define UART_MODE_NAME_SIZE			16
-#define UART_SUBSTATE_NAME_SIZE	24
+#define UART_MODE_NAME_SIZE			8
+#define UART_SUBSTATE_NAME_SIZE	16
 
 
 #define ARY_CHK_POINTS_COUNT 200
-#define UART_STATE_RECORD_SIZE 64
+#define UART_STATE_RECORD_SIZE 40
 
 
 typedef struct
@@ -50,7 +50,7 @@ void DebugUart_Init(void);
 void DebugUartSetCheckPoint(UartHandle* phUart, uint32_t cycle_number);
 
 void dbg_clear_dbg_cps_path(DbgCheckPointsPath* p_dbg_cps_path);
-void dbg_set_check_point(UartHandle* phUart, DbgCheckPointsPath* p_dbg_path, uint32_t cycle_number); 
+//void dbg_set_check_point(UartHandle* phUart, DbgCheckPointsPath* p_dbg_path, uint32_t cycle_number); 
 
 #endif
 

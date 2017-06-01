@@ -94,11 +94,8 @@ int main(void)
 		RtcLse32768_Init();
 		init_time();
 	}
-	
-	
-	
-	init_converter();
-	
+
+
 	LedPA5_Init();
 	
 	Max7219_Init();
@@ -129,27 +126,20 @@ int main(void)
 			if(IsFuncState_uartBt_PrepareSending())
 			{
 				uart_bt_request_prepare_sending();
-				
-				SetBt_Mode_FuncState(MODE_IDLE, FST_FREE, cycle_cnt);
-
-				
-					//		if(IS_BT_UART_STATE_ASKING_PREPARE)
-					//		{
-					//			clear_data_rx(&btUartHandle);
-					//		
-					//			set_bt_uart_state_address_sending();
-					//			StartSendUartData_IT(&btUartHandle);
-					//	
-					//		}
 			}
 			else if(IsFuncState_uartBt_Sending())
 			{
 			}
 			else if(IsFuncState_uartBt_TcntSent())
 			{
+//				DebugUartSetCheckPoint(GetBtUartHandle(), cycle_cnt);
 			}
 			else if(IsFuncState_uartBt_TC())
 			{		
+				DebugUartSetCheckPoint(GetBtUartHandle(), cycle_cnt);
+				
+				SetBt_Mode_FuncState(MODE_IDLE, FST_FREE, cycle_cnt);
+				
 			}
 			else if(IsFuncState_uartBt_PrepareReceiving())
 			{
@@ -231,13 +221,17 @@ int main(void)
 			}
 			else if(IsFuncState_uartPc_TcntSent())
 			{
+				DebugUartSetCheckPoint(GetPcUartHandle(), cycle_cnt);
 			}
 			else if(IsFuncState_uartPc_TC())
 			{	
 					//		else if(IS_PC_UART_STATE_SENDING_DONE)
 					//		{
 					//			set_pc_uart_state_downtime();
-					//		}				
+					//		}		
+
+				DebugUartSetCheckPoint(GetPcUartHandle(), cycle_cnt);
+
 			}
 			else if(IsFuncState_uartPc_PrepareReceiving())
 			{
@@ -273,25 +267,29 @@ int main(void)
 			}
 			else if(IsFuncState_uartPc_TcntSent())
 			{
+				DebugUartSetCheckPoint(GetPcUartHandle(), cycle_cnt);
 			}
 			else if(IsFuncState_uartPc_TC())
-			{		
+			{	
+				DebugUartSetCheckPoint(GetPcUartHandle(), cycle_cnt);
 			}
 		}
 		
 		if((IsMode_UBt_Idle())&&(IsMode_UPc_Idle()))
 		{
-			LED_ON;
 			
-			if(systick_count == 0)
-			{
-				delay_systick(1000);
-				structDecToBcd.dec = ++max7219_cnt;
-				
-				ConvertDecToBcd(&structDecToBcd);
-				Max7219_DisplayBcdArray(LEFT_ZERO, structDecToBcd.ary_bcd);
-				
-			}
+			
+//			if(systick_count == 0)
+//			{
+//				delay_systick(1000);
+//				structDecToBcd.dec = ++max7219_cnt;
+//				
+//				ConvertDecToBcd(&structDecToBcd);
+//				Max7219_DisplayBcdArray(structDecToBcd.ary_bcd);
+//				
+//			}
+			
+			LED_TOGGLE;
 		
 		}
 		
@@ -368,10 +366,7 @@ void init_time(void)
 
 
 
-void init_converter()
-{
-	structDecToBcd.digits_count = 10;
-}
+
 
 /******************************************************************************/
 /*                               SYS TICK TIMER                               */
@@ -415,11 +410,15 @@ void init_uarts()
 /******************************************************************************/
 void StartSendUartData_IT(UartHandle* phUart)
 {
+	phUart->uart_func_state_enm = FST_SENDING;
+	DebugUartSetCheckPoint(phUart, cycle_cnt);
+	
+	
 	phUart->bufferTX.ix_ary = 0;
 	
 	phUart->pUart->TDR =  phUart->bufferTX.p_ary_data[phUart->bufferTX.ix_ary++];
 	
-	phUart->pUart->CR1 |= USART_CR1_TXEIE;		/* enable RXNE interrupt */
+	phUart->pUart->CR1 |= USART_CR1_TXEIE;		/* enable TXE interrupt */
 	
 }
 
@@ -436,13 +435,22 @@ void prepare_ac_report_for_pc(void)
 
 void uart_bt_request_prepare_sending(void)
 { 
+	UartHandle* btUartHandle =  GetBtUartHandle();
 	
 	structDecToBcd.dec = cycle_cnt;
 	
 	ConvertDecToBcd(&structDecToBcd);
 	
-	Max7219_DisplayBcdArray(LEFT_ZERO, structDecToBcd.ary_bcd);
-//	Max7219_ShowAtPositionNumber(0, cycle_cnt);
+	Max7219_DisplayBcdArray(structDecToBcd.ary_bcd);
+	
+	//			clear_data_rx(&btUartHandle);
+	ClearDataRx(btUartHandle);
+	
+	//			set_bt_uart_state_address_sending();
+	// ...
+	
+	StartSendUartData_IT(btUartHandle);
+	
 	
 	
 
@@ -482,16 +490,12 @@ void EXTI4_15_IRQHandler(void)
   if ((EXTI->PR & EXTI_PR_PR13) == EXTI_PR_PR13)  /* Check line 13 has triggered the IT */
   {
     EXTI->PR |= EXTI_PR_PR13; /* Clear the pending bit */
-
-		
+	
 		cycle_cnt++;
-		
 		
 		SetBt_Mode_FuncState(MODE_BT_REQUEST, FST_PREPARE_SENDING, cycle_cnt);
 		
-		led_ms_wait = 0;
 		LED_TOGGLE;	
-		
 
   }
   else /* Should never occur */
@@ -509,7 +513,8 @@ void ProcessUartIrq(UartHandle* pHUart)
 	if(pUart->ISR & USART_ISR_TC)	// TRANSMIT COMPLETE STATE
 	{
 		pUart->ICR |= USART_ICR_TCCF;		
-		SetUartFuncState(pHUart, FST_TRANSMIT_COMPLETE);
+//		SetUartFuncState(pHUart, FST_TRANSMIT_COMPLETE);
+		pHUart->uart_func_state_enm = FST_TRANSMIT_COMPLETE;
 	}
 	else if(pUart->ISR & USART_ISR_RXNE)	// RXNE STATE
 	{
@@ -533,6 +538,7 @@ void ProcessUartIrq(UartHandle* pHUart)
 			{
 				pUart->CR1 &= ~USART_CR1_TXEIE;
 				pHUart->uart_func_state_enm = FST_TRMNL_CNT_SENT;
+				DebugUartSetCheckPoint(pHUart, cycle_cnt);
 			}
 		}
 	}

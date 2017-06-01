@@ -16,15 +16,19 @@
 #include "huart_pc.h"
 #include "DecBcdCharConverter.h"
 
+#define TIMEOUT_MS	8000
+#define START_BT_TIMEOUT (bt_ms_wait = TIMEOUT_MS)
+#define IS_BT_TIMEOUT_DONE (bt_ms_wait == 0)
 
 
-//#include "debug.h"
+
+////#include "debug.h"
 
 
-#ifdef UDEBUG
-	DbgCheckPointsPath stc_dbg_path = {0, ARY_CPS_PATH_COUNT};
-	uint32_t cycle=0;
-#endif
+//#ifdef UDEBUG
+//	DbgCheckPointsPath stc_dbg_path = {0, ARY_CPS_PATH_COUNT};
+//	uint32_t cycle=0;
+//#endif
 
 //// ------- Date Time Request
 const uint8_t DT_REQ_LENGTH = 7;
@@ -34,6 +38,9 @@ const uint8_t DT_ANSW_LENGTH = 11;
 uint8_t ary_dt_answer[DT_ANSW_LENGTH];		
 		
 /*------------- SysTick -------------*/
+
+
+
 volatile uint32_t bt_ms_wait = 0;
 volatile uint32_t led_ms_wait = 0;
 

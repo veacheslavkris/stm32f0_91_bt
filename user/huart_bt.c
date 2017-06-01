@@ -132,7 +132,7 @@ uint32_t IsBtRxDataFull()
 
 
 // select and set correct size of receive_buffer
-void SelectBtRxDataSize(void)
+uint32_t SetBtRxDataSize(void)
 {
 	// we have got 1 char
 	// using this char we select expecting answer size 
@@ -153,6 +153,8 @@ void SelectBtRxDataSize(void)
 	}
 	
 	btUartHandle.bufferRX.data_size = rx_buff_size;
+	
+	return rx_buff_size;
 }
 
 

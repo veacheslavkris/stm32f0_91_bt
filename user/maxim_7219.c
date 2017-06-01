@@ -17,13 +17,13 @@ uint32_t ary_symbols[SYMBOLS_CNT];
 /******************************************************************************/
 
 #define PORT_CLK			GPIOC 
-#define PIN_CLK_POS 	0
+#define PIN_CLK_POS 	5
 
-#define PORT_DOUT			GPIOC
-#define PIN_DOUT_POS	1
+#define PORT_DOUT			GPIOC 
+#define PIN_DOUT_POS	8
 
-#define PORT_LATCH		GPIOB 
-#define PIN_LATCH_POS	0
+#define PORT_LATCH		GPIOC
+#define PIN_LATCH_POS	6
 
 
 #define  LATCH_OFF				(PORT_LATCH->BRR = 1 << PIN_LATCH_POS	)

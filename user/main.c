@@ -67,6 +67,9 @@
 
 	StructDecToBcd structDecToBcd;
 
+	UartHandle* phPcUart = 0;
+	UartHandle* phBtUart = 0;
+
 /* Private function prototypes -----------------------------------------------*/
 
 
@@ -132,23 +135,17 @@ int main(void)
 			}
 			else if(IsFuncState_uartBt_TcntSent())
 			{
-//				DebugUartSetCheckPoint(GetBtUartHandle(), cycle_cnt);
 			}
 			else if(IsFuncState_uartBt_TC())
 			{		
-				DebugUartSetCheckPoint(GetBtUartHandle(), cycle_cnt);
-				
-				SetBt_Mode_FuncState(MODE_IDLE, FST_FREE, cycle_cnt);
-				
+				SetBt_Mode_FuncState(MODE_BT_REQUEST, FST_PREPARE_RECEIVING, cycle_cnt);
 			}
 			else if(IsFuncState_uartBt_PrepareReceiving())
 			{
-					//		else if(IS_BT_UART_STATE_LISTENING_PREPARE)
-					//		{
-					//			// prepare timeout of answer
-					//			START_BT_TIMEOUT;
-					//			set_bt_uart_state_answ_listening();
-					//		}
+				// prepare timeout of answer
+				START_BT_TIMEOUT;
+				SetBt_Mode_FuncState(MODE_BT_REQUEST, FST_RECEIVING, cycle_cnt);
+
 			}
 			else if(IsFuncState_uartBt_Receiving())
 			{
@@ -185,6 +182,39 @@ int main(void)
 					//				} //if(dtAnswerStruct.ix_ary > 0)
 					//			} //while(STATE_DT_ANSW_GET == curState)
 					//		}
+					
+					while((IsMode_BT_Request())&&(IsFuncState_uartBt_Receiving()))
+					{
+						// check for timeout
+						if(IS_BT_TIMEOUT_DONE)
+						{
+							SetBt_Mode_FuncState(MODE_ERROR, FST_ERR_TIMEOUT, cycle_cnt);
+						}
+						
+						// did we get as minimum 1 char ? 
+						if(phBtUart->bufferRX.ix_ary > 0)
+						{
+							// as minimum 1 char we have got
+							if(phBtUart->bufferRX.ix_ary == 1)
+							{
+								// we have got 1 char
+								// using this char we select expecting answer size 
+								if(SetBtRxDataSize() == 0)
+								{
+									// not expected first answer char
+									SetBt_Mode_FuncState(MODE_ERROR, FST_ERR_DATA, cycle_cnt);
+								}
+							} 
+							else if(IsBtRxDataFull()) 
+							{
+								set_bt_uart_state_answ_done();
+								SetBt_Mode_FuncState(MODE_BT_REQUEST, FST
+							} 
+						} 
+					
+					}// while MODE_BT_REQUEST && FST_RECEIVING
+					
+					
 			}
 			else if(IsFuncState_uartBt_TcntReceived())
 			{	
@@ -396,6 +426,10 @@ void init_uarts()
 		
 	HUartPc_Init();
 	SetPc_Mode_FuncState(MODE_IDLE, FST_FREE, cycle_cnt);
+	
+	phBtUart = GetBtUartHandle();
+	phPcUart = GetPcUartHandle();
+	
 }
 
 
@@ -429,13 +463,13 @@ void StartSendUartData_IT(UartHandle* phUart)
 void prepare_ac_report_for_pc(void)
 {
 	
-	PrepareAcReportForPc(GetBtUartHandle());
+	PrepareAcReportForPc(phBtUart);
 	
 }
 
 void uart_bt_request_prepare_sending(void)
 { 
-	UartHandle* btUartHandle =  GetBtUartHandle();
+	
 	
 	structDecToBcd.dec = cycle_cnt;
 	
@@ -444,12 +478,12 @@ void uart_bt_request_prepare_sending(void)
 	Max7219_DisplayBcdArray(structDecToBcd.ary_bcd);
 	
 	//			clear_data_rx(&btUartHandle);
-	ClearDataRx(btUartHandle);
+	ClearDataRx(phBtUart);
 	
 	//			set_bt_uart_state_address_sending();
 	// ...
 	
-	StartSendUartData_IT(btUartHandle);
+	StartSendUartData_IT(phBtUart);
 	
 	
 	
@@ -482,6 +516,7 @@ void HardFault_Handler(void)
 void SysTick_Handler(void)
 {
 	if(systick_count > 0)systick_count--;
+	if(bt_ms_wait > 0)bt_ms_wait--;
 }
 
 
@@ -513,8 +548,9 @@ void ProcessUartIrq(UartHandle* pHUart)
 	if(pUart->ISR & USART_ISR_TC)	// TRANSMIT COMPLETE STATE
 	{
 		pUart->ICR |= USART_ICR_TCCF;		
-//		SetUartFuncState(pHUart, FST_TRANSMIT_COMPLETE);
 		pHUart->uart_func_state_enm = FST_TRANSMIT_COMPLETE;
+		DebugUartSetCheckPoint(pHUart, cycle_cnt);
+
 	}
 	else if(pUart->ISR & USART_ISR_RXNE)	// RXNE STATE
 	{

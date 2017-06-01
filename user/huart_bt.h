@@ -34,7 +34,7 @@ uint32_t IsFuncState_uartBt_ErrTimeout(void);
 void SetBt_Mode_FuncState(UartModeEnum uart_mode_enm, UartFuncStateEnum uart_func_state_enm, uint32_t cycle);
 
 uint32_t IsBtRxDataFull(void);
-void SetBtRxDataSize(uint32_t size);
+uint32_t SetBtRxDataSize(void);
 
 
 

@@ -64,6 +64,7 @@
 	volatile uint32_t systick_count = 0;
 	volatile uint32_t cycle_cnt = 0;
 	volatile uint32_t max7219_cnt = 0;
+	volatile uint8_t an_char;
 
 	StructDecToBcd structDecToBcd;
 
@@ -138,57 +139,24 @@ int main(void)
 			}
 			else if(IsFuncState_uartBt_TC())
 			{		
-				SetBt_Mode_FuncState(MODE_BT_REQUEST, FST_PREPARE_RECEIVING, cycle_cnt);
+				SetBt_FuncState(FST_PREPARE_RECEIVING, cycle_cnt);
 			}
 			else if(IsFuncState_uartBt_PrepareReceiving())
 			{
 				// prepare timeout of answer
 				START_BT_TIMEOUT;
-				SetBt_Mode_FuncState(MODE_BT_REQUEST, FST_RECEIVING, cycle_cnt);
+				SetBt_FuncState(FST_RECEIVING, cycle_cnt);
 
 			}
 			else if(IsFuncState_uartBt_Receiving())
 			{
-					//		else if(IS_BT_UART_STATE_ANSW_LISTENING)
-					//		{
-					//			while(IS_BT_UART_STATE_ANSW_LISTENING)
-					//			{
-					//				// check for timeout
-					//				if(IS_BT_TIMEOUT_DONE)
-					//				{
-					//					set_bt_uart_state_err_timeout();
-					//				}
-					//				
-					//				// did we get as minimum 1 char ? 
-					//				if(BT_RX_BUFF_IX_ARY > 0)
-					//				{
-					//					// as minimum 1 char we have got
-					//					if(BT_RX_BUFF_IX_ARY == 1)
-					//					{
-					//						// we have got 1 char
-					//						// using this char we select expecting answer size 
-					//						select_bt_rx_buff_size();
-					//						
-					//						if( BT_RX_BUFF_DATA_SIZE == 0)
-					//						{
-					//							// not expected first answer char
-					//							set_bt_uart_state_err_data();
-					//						}
-					//					} //if(dtAnswerStruct.data_size == 0)
-					//					else if(BT_RX_BUFF_IX_ARY == BT_RX_BUFF_DATA_SIZE) //if(dtAnswerStruct.data_size > 0)
-					//					{
-					//						set_bt_uart_state_answ_done();
-					//					} //else //if(dtAnswerStruct.data_size > 0)
-					//				} //if(dtAnswerStruct.ix_ary > 0)
-					//			} //while(STATE_DT_ANSW_GET == curState)
-					//		}
 					
 					while((IsMode_BT_Request())&&(IsFuncState_uartBt_Receiving()))
 					{
 						// check for timeout
 						if(IS_BT_TIMEOUT_DONE)
 						{
-							SetBt_Mode_FuncState(MODE_ERROR, FST_ERR_TIMEOUT, cycle_cnt);
+							SetBt_FuncState(FST_ERR_TIMEOUT, cycle_cnt);
 						}
 						
 						// did we get as minimum 1 char ? 
@@ -202,14 +170,15 @@ int main(void)
 								if(SetBtRxDataSize() == 0)
 								{
 									// not expected first answer char
-									SetBt_Mode_FuncState(MODE_ERROR, FST_ERR_DATA, cycle_cnt);
+									SetBt_FuncState(FST_ERR_DATA, cycle_cnt);
 								}
-							} 
+							}
 							else if(IsBtRxDataFull()) 
 							{
-								set_bt_uart_state_answ_done();
-								SetBt_Mode_FuncState(MODE_BT_REQUEST, FST
-							} 
+								SetBt_FuncState(FST_TRMNL_CNT_RECEIVED, cycle_cnt);
+
+							}
+							
 						} 
 					
 					}// while MODE_BT_REQUEST && FST_RECEIVING
@@ -218,19 +187,15 @@ int main(void)
 			}
 			else if(IsFuncState_uartBt_TcntReceived())
 			{	
-					//		else if(IS_BT_UART_STATE_ANSW_DONE)
-					//		{
-					//			set_bt_uart_state_downtime();
-					//			set_pc_uart_state_ac_reporting_prepare();
-					//		}
+
+				
+				SetBt_Mode_FuncState(MODE_IDLE, FST_FREE, cycle_cnt);
+				//					set_pc_uart_state_ac_reporting_prepare();
 			}
 			else if(IsFuncState_uartBt_ErrTimeout())
 			{
-					//		else if(IS_BT_UART_STATE_ERR_TIMEOUT)
-					//		{
-					//			LedBlockIndicating(100,100,10);
-					//			set_bt_uart_state_downtime();
-					//		}
+				SetBt_Mode_FuncState(MODE_IDLE, FST_FREE, cycle_cnt);
+				show_err_on_display_0();
 			}
 		}
 		
@@ -319,7 +284,7 @@ int main(void)
 //				
 //			}
 			
-			LED_TOGGLE;
+			
 		
 		}
 		
@@ -554,13 +519,15 @@ void ProcessUartIrq(UartHandle* pHUart)
 	}
 	else if(pUart->ISR & USART_ISR_RXNE)	// RXNE STATE
 	{
-		UartReceivedChar* structReceivedChar = UartGetReceivedChar(pUart);
-				
 		if(pHUart->uart_func_state_enm == FST_RECEIVING) // IS RECEIVING STATE
 		{
+			UartReceivedChar* structReceivedChar = UartGetReceivedChar(pUart);
 			pHUart->bufferRX.p_ary_data[pHUart->bufferRX.ix_ary++] = structReceivedChar->chartoreceive;
 		}
-		// else as state is not receiving ignore received data
+		else
+		{
+			an_char = (uint8_t)(pUart->RDR);
+		}
 	}
 	else if(pUart->ISR & USART_ISR_TXE)	// TXE STATE
 	{

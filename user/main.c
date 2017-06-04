@@ -130,6 +130,7 @@ int main(void)
 			if(IsFuncState_uartBt_PrepareSending())
 			{
 				uart_bt_request_prepare_sending();
+				StartSendUartData_IT(phBtUart);
 			}
 			else if(IsFuncState_uartBt_Sending())
 			{
@@ -187,10 +188,9 @@ int main(void)
 			}
 			else if(IsFuncState_uartBt_TcntReceived())
 			{	
-
-				
 				SetBt_Mode_FuncState(MODE_IDLE, FST_FREE, cycle_cnt);
-				//					set_pc_uart_state_ac_reporting_prepare();
+
+				SetPc_Mode_FuncState(MODE_AC_REPORT, FST_PREPARE_SENDING, cycle_cnt);
 			}
 			else if(IsFuncState_uartBt_ErrTimeout())
 			{
@@ -250,6 +250,10 @@ int main(void)
 		{
 			if(IsFuncState_uartPc_PrepareSending())
 			{
+				prepare_ac_report_for_pc();
+				
+				StartSendUartData_IT(phPcUart);
+
 					//		else if(IS_PC_UART_STATE_AC_REPORTING_PREPARE)
 					//		{
 					//			prepare_ac_report_for_pc();
@@ -262,11 +266,10 @@ int main(void)
 			}
 			else if(IsFuncState_uartPc_TcntSent())
 			{
-				DebugUartSetCheckPoint(GetPcUartHandle(), cycle_cnt);
 			}
 			else if(IsFuncState_uartPc_TC())
 			{	
-				DebugUartSetCheckPoint(GetPcUartHandle(), cycle_cnt);
+				SetPc_Mode_FuncState(MODE_IDLE, FST_FREE, cycle_cnt);
 			}
 		}
 		
@@ -442,17 +445,7 @@ void uart_bt_request_prepare_sending(void)
 	
 	Max7219_DisplayBcdArray(structDecToBcd.ary_bcd);
 	
-	//			clear_data_rx(&btUartHandle);
 	ClearDataRx(phBtUart);
-	
-	//			set_bt_uart_state_address_sending();
-	// ...
-	
-	StartSendUartData_IT(phBtUart);
-	
-	
-	
-
 }
 
 /******************************************************************************/

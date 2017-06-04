@@ -115,6 +115,11 @@ void SetPc_Mode_FuncState(UartModeEnum uart_mode_enm, UartFuncStateEnum uart_fun
 	DebugUartSetCheckPoint(&pcUartHandle, cycle);
 }
 
+void SetPc_FuncState(UartFuncStateEnum uart_func_state_enm, uint32_t cycle)
+{
+	SetUartFuncState(&pcUartHandle, uart_func_state_enm);
+	DebugUartSetCheckPoint(&pcUartHandle, cycle);
+}
 /******************************************************************************/
 /*                                                                            */
 /******************************************************************************/

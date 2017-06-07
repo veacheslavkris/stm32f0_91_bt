@@ -61,10 +61,11 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-	volatile uint32_t systick_count = 0;
+	
 	volatile uint32_t cycle_cnt = 0;
 	volatile uint32_t max7219_cnt = 0;
 	volatile uint8_t an_char;
+	
 
 	StructDecToBcd structDecToBcd;
 
@@ -144,8 +145,10 @@ int main(void)
 			}
 			else if(IsFuncState_uartBt_PrepareReceiving())
 			{
-				// prepare timeout of answer
 				START_BT_TIMEOUT;
+				
+				
+				
 				SetBt_FuncState(FST_RECEIVING, cycle_cnt);
 
 			}
@@ -155,7 +158,7 @@ int main(void)
 					while((IsMode_BT_Request())&&(IsFuncState_uartBt_Receiving()))
 					{
 						// check for timeout
-						if(IS_BT_TIMEOUT_DONE)
+						if(IsBtTimoutDone())
 						{
 							SetBt_FuncState(FST_ERR_TIMEOUT, cycle_cnt);
 						}
@@ -275,6 +278,13 @@ int main(void)
 		
 		if((IsMode_UBt_Idle())&&(IsMode_UPc_Idle()))
 		{
+//			LED_TOGGLE;
+//			
+//			START_BT_TIMEOUT;
+//			
+//			while(!IsBtTimoutDone()) continue;
+			
+			
 			
 			
 //			if(systick_count == 0)
@@ -372,9 +382,9 @@ void init_time(void)
 
 void delay_systick(uint32_t ms)
 {
-	systick_count = ms;
+	uint32_t start = systick_count;
 	
-	while(systick_count > 0) continue;
+	while(GetTicksSince(start) <= ms) continue;
 }
 
 /******************************************************************************/
@@ -473,8 +483,7 @@ void HardFault_Handler(void)
 
 void SysTick_Handler(void)
 {
-	if(systick_count > 0)systick_count--;
-	if(bt_ms_wait > 0)bt_ms_wait--;
+	systick_count++;
 }
 
 

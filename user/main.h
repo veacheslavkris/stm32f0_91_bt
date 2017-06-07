@@ -16,19 +16,13 @@
 #include "huart_pc.h"
 #include "DecBcdCharConverter.h"
 
-#define TIMEOUT_MS	8000
-#define START_BT_TIMEOUT (bt_ms_wait = TIMEOUT_MS)
-#define IS_BT_TIMEOUT_DONE (bt_ms_wait == 0)
+#define BT_TIMEOUT_MS	8000
+#define START_BT_TIMEOUT (bt_timeout_start = systick_count)
 
 
 
-////#include "debug.h"
 
 
-//#ifdef UDEBUG
-//	DbgCheckPointsPath stc_dbg_path = {0, ARY_CPS_PATH_COUNT};
-//	uint32_t cycle=0;
-//#endif
 
 //// ------- Date Time Request
 const uint8_t DT_REQ_LENGTH = 7;
@@ -39,10 +33,11 @@ uint8_t ary_dt_answer[DT_ANSW_LENGTH];
 		
 /*------------- SysTick -------------*/
 
+volatile uint32_t systick_count = 0;
+#define SYSTICK_MAX	0x00FFFFFFU
+volatile uint32_t bt_timeout_start;
 
 
-volatile uint32_t bt_ms_wait = 0;
-volatile uint32_t led_ms_wait = 0;
 
 /******************************************************************************/
 /*                        ProcessUartIrq CHECK STATE                          */
@@ -57,15 +52,29 @@ volatile uint32_t led_ms_wait = 0;
 /*                                  FUNCTIONS                                 */
 /******************************************************************************/
 
-__INLINE uint32_t IsBtTimeoutDone()
+__STATIC_INLINE uint32_t GetTicksSince(uint32_t start)
 {
-	return (bt_ms_wait == 0);
+	if(start <= systick_count)
+	{		
+		return(systick_count - start);
+	}
+	else
+	{		
+		return ((SYSTICK_MAX-start) + systick_count);
+	}
 }
 
-__INLINE void StartBtTimeout(uint32_t timeout_ms)
+
+__STATIC_INLINE uint32_t IsBtTimoutDone(void)
 {
-	bt_ms_wait = timeout_ms;
+	return ( GetTicksSince(bt_timeout_start) >= BT_TIMEOUT_MS );
+
 }
+
+
+
+
+
 
 /*-------------  Functions  -------------*/
 void prepare_ac_report_for_pc(void);

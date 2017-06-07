@@ -129,8 +129,13 @@ void show_err_on_display_1()
 
 __INLINE void latch_max7219(void)
 {
-			LATCH_ON;
-			LATCH_OFF;
+	volatile uint32_t delay = 2;
+	
+	LATCH_ON;
+
+	while(delay--)continue;
+
+	LATCH_OFF;
 }
 //
 

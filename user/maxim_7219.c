@@ -97,9 +97,7 @@ void Max7219_ShowAtPositionNumber(uint32_t position, uint32_t number)
 {
 	if((position <= POSITIONS) && (number <= NUMBERS))
 	{
-//		send_bits(((ary_positions[position])<<8)|ary_numbers[number]);
 		send_bits(((ary_positions[position])<<8)|ary_symbols[number]);
-
 	}
 	else
 	{
@@ -202,19 +200,9 @@ void Max7219_ClearAllDigits(void)
 void Max7219_DisplayBcdArray(uint8_t* p_ary_bcd)
 {
 	uint32_t ix = 7;
-//	uint32_t checking_state = 1;
-	
 	
 	for(ix = 7; ix < 8; ix--)
 	{
-//		if(left_sign == LEFT_ZERO)
-//		{
-//			// direct copy
-////			send_bits(((ary_positions[ix])<<8)|ary_numbers[p_ary_bcd[ix]]);
-//			send_bits(((ary_positions[ix])<<8)|ary_symbols[p_ary_bcd[ix]]);
-
-//		}
-		
 		send_bits(((ary_positions[ix])<<8)|ary_symbols[p_ary_bcd[ix]]);
 	}
 	

@@ -16,11 +16,9 @@
 #include "huart_pc.h"
 #include "DecBcdCharConverter.h"
 
+#include "systick.h"
+
 #define BT_TIMEOUT_MS	8000
-#define START_BT_TIMEOUT (bt_timeout_start = systick_count)
-
-
-
 
 
 
@@ -32,9 +30,6 @@ const uint8_t DT_ANSW_LENGTH = 11;
 uint8_t ary_dt_answer[DT_ANSW_LENGTH];		
 		
 /*------------- SysTick -------------*/
-
-volatile uint32_t systick_count = 0;
-#define SYSTICK_MAX	0x00FFFFFFU
 volatile uint32_t bt_timeout_start;
 
 
@@ -52,37 +47,21 @@ volatile uint32_t bt_timeout_start;
 /*                                  FUNCTIONS                                 */
 /******************************************************************************/
 
-__STATIC_INLINE uint32_t GetTicksSince(uint32_t start)
-{
-	if(start <= systick_count)
-	{		
-		return(systick_count - start);
-	}
-	else
-	{		
-		return ((SYSTICK_MAX-start) + systick_count);
-	}
-}
-
-
 __STATIC_INLINE uint32_t IsBtTimoutDone(void)
 {
 	return ( GetTicksSince(bt_timeout_start) >= BT_TIMEOUT_MS );
-
 }
 
-
-
-
-
+__STATIC_INLINE void StartBtTimout(void)
+{
+	bt_timeout_start = GetSystickCount();
+}
 
 /*-------------  Functions  -------------*/
 void prepare_ac_report_for_pc(void);
 void prepare_dt_asking_pc(void);
 
 void init_uarts(void);
-
-void delay_systick(uint32_t ms);
 
 void uart_bt_request_prepare_sending(void);
 

@@ -48,7 +48,6 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-//#include "stm32f0xx.h"
 #include "main.h"
 
 /** @addtogroup STM32F0_Snippets
@@ -108,7 +107,7 @@ int main(void)
 	
 
 	
-	delay_systick(1000);
+	DelaySystick(1000);
 	
 	Max7219_ShowAtPositionNumber(0,0);
 	Max7219_ShowAtPositionNumber(4,0);
@@ -145,8 +144,7 @@ int main(void)
 			}
 			else if(IsFuncState_uartBt_PrepareReceiving())
 			{
-				START_BT_TIMEOUT;
-				
+				StartBtTimout();
 				
 				
 				SetBt_FuncState(FST_RECEIVING, cycle_cnt);
@@ -278,11 +276,10 @@ int main(void)
 		
 		if((IsMode_UBt_Idle())&&(IsMode_UPc_Idle()))
 		{
-//			LED_TOGGLE;
-//			
-//			START_BT_TIMEOUT;
-//			
-//			while(!IsBtTimoutDone()) continue;
+			LED_TOGGLE;
+			
+			DelaySystick(1000);
+			
 			
 			
 			
@@ -380,12 +377,12 @@ void init_time(void)
 /*                               SYS TICK TIMER                               */
 /******************************************************************************/
 
-void delay_systick(uint32_t ms)
-{
-	uint32_t start = systick_count;
-	
-	while(GetTicksSince(start) <= ms) continue;
-}
+//void delay_systick(uint32_t ms)
+//{
+//	uint32_t start = systick_count;
+//	
+//	while(GetTicksSince(start) <= ms) continue;
+//}
 
 /******************************************************************************/
 /*                             Init UART Handles                              */
@@ -481,10 +478,10 @@ void HardFault_Handler(void)
 /*  file (startup_stm32f072xb.s).                                               */
 /******************************************************************************/
 
-void SysTick_Handler(void)
-{
-	systick_count++;
-}
+//void SysTick_Handler(void)
+//{
+//	systick_count++;
+//}
 
 
 void EXTI4_15_IRQHandler(void)

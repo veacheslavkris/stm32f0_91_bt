@@ -505,19 +505,27 @@ void EXTI4_15_IRQHandler(void)
 /******************************************************************************/
 /*                       USART 7-8 Exceptions Handlers                        */
 /******************************************************************************/
-void ProcessUartIrq(UartHandle* pHUart)
+uint32_t ProcessUartIrq(UartHandle* pHUart)
 {
+	uint32_t processed = 0;
 	USART_TypeDef* pUart = pHUart->pUart;
 	
-	if(pUart->ISR & USART_ISR_TC)	// TRANSMIT COMPLETE STATE
+	
+	
+	if((pUart->ISR & USART_ISR_TC) && (pUart->CR1 & USART_CR1_TCIE))	// TRANSMIT COMPLETE STATE
 	{
+		processed = 1;
+		
 		pUart->ICR |= USART_ICR_TCCF;		
 		pHUart->uart_func_state_enm = FST_TRANSMIT_COMPLETE;
 		DebugUartSetCheckPoint(pHUart, cycle_cnt);
+		
 
 	}
-	else if(pUart->ISR & USART_ISR_RXNE)	// RXNE STATE
+	else if((pUart->ISR & USART_ISR_RXNE) && (pUart->CR1 & USART_CR1_RXNEIE))	// RXNE STATE
 	{
+		processed = 1;
+		
 		if(pHUart->uart_func_state_enm == FST_RECEIVING) // IS RECEIVING STATE
 		{
 			UartReceivedChar* structReceivedChar = UartGetReceivedChar(pUart);
@@ -527,9 +535,13 @@ void ProcessUartIrq(UartHandle* pHUart)
 		{
 			an_char = (uint8_t)(pUart->RDR);
 		}
+		
+		
 	}
-	else if(pUart->ISR & USART_ISR_TXE)	// TXE STATE
+	else if((pUart->ISR & USART_ISR_TXE)	&& (pUart->CR1 & USART_CR1_TXEIE))// TXE STATE
 	{
+		processed = 1;
+		
 		if(pHUart->uart_func_state_enm == FST_SENDING) // IS SENDING STATE
 		{
 			if(pHUart->bufferTX.ix_ary < pHUart->bufferTX.data_size)	// SENDING IS NOT COMPLETE
@@ -543,15 +555,21 @@ void ProcessUartIrq(UartHandle* pHUart)
 				DebugUartSetCheckPoint(pHUart, cycle_cnt);
 			}
 		}
+		
+		
 	}
-
+	
+	return processed;
 }
 
 void USART3_8_IRQHandler(void)
 {
-	ProcessUartIrq(GetBtUartHandle());
-
-	ProcessUartIrq(GetPcUartHandle());
+	
+	if(ProcessUartIrq(GetBtUartHandle()) == 1) return ;
+	else ProcessUartIrq(GetPcUartHandle());
+	
+//	ProcessUartIrq(GetBtUartHandle());
+//	ProcessUartIrq(GetPcUartHandle());
 }
 
 

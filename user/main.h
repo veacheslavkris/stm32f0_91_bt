@@ -70,7 +70,7 @@ void uart_bt_request_prepare_sending(void);
 void StartSendUartData_IT(UartHandle* phUart);
 
 
-void ProcessUartIrq(UartHandle* pHUart);
+uint32_t ProcessUartIrq(UartHandle* pHUart);
 
 void init_converter(void);
 void init_time(void);

@@ -2,7 +2,6 @@
 #define A_UART_H
 
 #include "stm32f091xc.h"
-//#include "stdint.h"
 
 
 

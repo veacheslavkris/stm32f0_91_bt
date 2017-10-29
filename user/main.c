@@ -535,8 +535,7 @@ uint32_t ProcessUartIrq(UartHandle* pHUart)
 		{
 			an_char = (uint8_t)(pUart->RDR);
 		}
-		
-		
+				
 	}
 	else if((pUart->ISR & USART_ISR_TXE)	&& (pUart->CR1 & USART_CR1_TXEIE))// TXE STATE
 	{
